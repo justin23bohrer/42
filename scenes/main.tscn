@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://o48jk4dckoer" path="res://scenes/domino_slot.tscn" id="6_jk677"]
 [ext_resource type="Script" path="res://scripts/domino_slot.gd" id="7_hicqo"]
 [ext_resource type="AudioStream" uid="uid://cd4ju6fp6u55d" path="res://assets/music/bitSurf.wav" id="8_cxv0x"]
-[ext_resource type="PackedScene" uid="uid://dfpoqc88xspqk" path="res://screen_effect.tscn" id="9_6jgts"]
+[ext_resource type="PackedScene" uid="uid://dfpoqc88xspqk" path="res://scenes/screen_effect.tscn" id="9_6jgts"]
 [ext_resource type="Script" path="res://scenes/player_hand.gd" id="10_2kef0"]
 
 [node name="Main" type="Node"]
@@ -40,7 +40,6 @@ volume_db = -17.445
 autoplay = true
 
 [node name="screenEffect" parent="." instance=ExtResource("9_6jgts")]
-visible = false
 
 [node name="playerHand" type="Node2D" parent="."]
 visible = false

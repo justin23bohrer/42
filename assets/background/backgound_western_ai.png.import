@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://u3w5tg6fha13"
-path="res://.godot/imported/backgound_western_ai.png-90cbc07d992cf6830c32363fe5910132.ctex"
+path="res://.godot/imported/backgound_western_ai.png-94cd19e8e6b178ab92c8ee1470e670bd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://backgound_western_ai.png"
-dest_files=["res://.godot/imported/backgound_western_ai.png-90cbc07d992cf6830c32363fe5910132.ctex"]
+source_file="res://assets/background/backgound_western_ai.png"
+dest_files=["res://.godot/imported/backgound_western_ai.png-94cd19e8e6b178ab92c8ee1470e670bd.ctex"]
 
 [params]
 

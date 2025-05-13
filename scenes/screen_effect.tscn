@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://dfpoqc88xspqk"]
 
-[ext_resource type="Shader" path="res://vhs.gdshader" id="1_amtd3"]
+[ext_resource type="Shader" path="res://assets/shaders/vhs.gdshader" id="1_amtd3"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_3aotx"]
 shader = ExtResource("1_amtd3")
@@ -19,7 +19,7 @@ shader_parameter/noise_opacity = 0.0
 shader_parameter/noise_speed = 5.0
 shader_parameter/static_noise_intensity = 0.06
 shader_parameter/aberration = 4.75e-08
-shader_parameter/brightness = 1.4
+shader_parameter/brightness = 0.985
 shader_parameter/discolor = false
 shader_parameter/warp_amount = 0.0
 shader_parameter/clip_warp = false

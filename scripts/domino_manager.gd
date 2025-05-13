@@ -9,9 +9,11 @@ const Z_INDEX_DRAGGED = 100
 var domino_being_dragged
 var screen_size
 var is_hovering_on_domino
+var player_hand_reference
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	player_hand_reference = $"../playerHand"
 	screen_size = get_viewport_rect().size
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -45,10 +47,13 @@ func finish_drag():
 		domino_being_dragged.scale = Vector2(1.05, 1.05)
 		var domino_slot_found = raycast_check_for_domino_slot()
 		if domino_slot_found and not domino_slot_found.domino_in_slot:
+			player_hand_reference.remove_domino_from_hand(domino_being_dragged)
 			domino_being_dragged.position = domino_slot_found.position
 			domino_slot_found.get_node("Area2D/CollisionShape2D").disabled = true
 			domino_slot_found.domino_in_slot = true
 			domino_being_dragged.is_locked = true  
+		else:
+			player_hand_reference.add_domino_to_hand(domino_being_dragged)
 		domino_being_dragged = null
 
 func connect_domino_signals(domino):

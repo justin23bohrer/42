@@ -21,13 +21,17 @@ func _ready() -> void:
 		add_domino_to_hand(new_domino)
 
 func add_domino_to_hand(domino):
-	player_hand.insert(0, domino)
-	update_hand_position()
+	if domino not in player_hand:
+		player_hand.insert(0, domino)
+		update_hand_position()
+	else:
+		animate_domino_to_position(domino, domino.starting_position)
 	
 func update_hand_position():
 	for i in range(player_hand.size()):
 		var new_position = Vector2(calculate_domino_position(i), HAND_Y_POSITION)
 		var domino = player_hand[i]
+		domino.starting_position = new_position
 		animate_domino_to_position(domino, new_position)
 
 func calculate_domino_position(i):
@@ -40,5 +44,7 @@ func animate_domino_to_position(domino, position):
 	tween.tween_property(domino, "position", position, 0.1)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+func remove_domino_from_hand(domino):
+	if domino in player_hand:
+		player_hand.erase(domino)
+		update_hand_position()

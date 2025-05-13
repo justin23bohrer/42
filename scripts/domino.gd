@@ -4,7 +4,7 @@ signal hovered
 signal hovered_off
 
 var is_locked = false
-
+var starting_position
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	#Must have parent 
