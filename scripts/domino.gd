@@ -5,10 +5,20 @@ signal hovered_off
 
 var is_locked = false
 var starting_position
+
+var left_value: int = 0
+var right_value: int = 0
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	#Must have parent 
 	get_parent().connect_domino_signals(self)
+	update_domino_display()
+
+func update_domino_display():
+	print("Domino: ", left_value, "-", right_value)
+	$Label.text = str(left_value)
+	$Label2.text = str(right_value)
 
 func _process(delta: float) -> void:
 	pass

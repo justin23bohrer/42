@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dhpm8c6ce6vb0"]
+[gd_scene load_steps=11 format=3 uid="uid://dhpm8c6ce6vb0"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_o8sy6"]
 [ext_resource type="Texture2D" uid="uid://cdhsdek7afjlj" path="res://assets/background/9285000.jpg" id="2_35fhj"]
@@ -9,6 +9,7 @@
 [ext_resource type="AudioStream" uid="uid://cd4ju6fp6u55d" path="res://assets/music/bitSurf.wav" id="8_cxv0x"]
 [ext_resource type="PackedScene" uid="uid://dfpoqc88xspqk" path="res://scenes/screen_effect.tscn" id="9_6jgts"]
 [ext_resource type="Script" path="res://scenes/player_hand.gd" id="10_2kef0"]
+[ext_resource type="Script" path="res://scenes/game_manager.gd" id="10_kwwd6"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_o8sy6")
@@ -44,3 +45,22 @@ autoplay = true
 [node name="playerHand" type="Node2D" parent="."]
 visible = false
 script = ExtResource("10_2kef0")
+
+[node name="subDom" type="Button" parent="."]
+visible = false
+anchors_preset = -1
+anchor_left = 0.132
+anchor_top = 0.617
+anchor_right = 0.132
+anchor_bottom = 0.617
+offset_left = -44.96
+offset_top = -0.240021
+offset_right = 163.04
+offset_bottom = 54.76
+theme_override_font_sizes/font_size = 34
+text = "Submit dom"
+
+[node name="gameManager" type="Node2D" parent="."]
+script = ExtResource("10_kwwd6")
+
+[connection signal="pressed" from="subDom" to="." method="_on_sub_dom_pressed"]

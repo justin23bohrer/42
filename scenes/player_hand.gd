@@ -1,23 +1,25 @@
 extends Node2D
 
-const HAND_COUNT = 4
 const DOMINO_SCENE_PATH = "res://scenes/domino.tscn"
 const CARD_WIDTH = 120
-const HAND_Y_POSITION = 600
+const HAND_Y_POSITION = 550
 
 var player_hand = []
 var center_screen_x
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	
+func _ready():
 	center_screen_x = get_viewport().size.x / 2
-	
+
+func receive_domino_values(domino_values: Array):
 	var domino_scene = preload(DOMINO_SCENE_PATH)
-	for i in range(HAND_COUNT):
+
+	for pair in domino_values:
 		var new_domino = domino_scene.instantiate()
-		$"../dominoManager".add_child(new_domino)
-		new_domino.name = "Domino"
+		new_domino.left_value = pair[0]
+		new_domino.right_value = pair[1]
+
+		get_node("../dominoManager").add_child(new_domino)
+		add_domino_to_hand(new_domino)
 		add_domino_to_hand(new_domino)
 
 func add_domino_to_hand(domino):
@@ -28,8 +30,18 @@ func add_domino_to_hand(domino):
 		animate_domino_to_position(domino, domino.starting_position)
 	
 func update_hand_position():
-	for i in range(player_hand.size()):
-		var new_position = Vector2(calculate_domino_position(i), HAND_Y_POSITION)
+	var total = player_hand.size()
+	for i in range(total):
+		var row = 0 if i < 4 else 1
+		var index_in_row = i if row == 0 else i - 4
+		
+		var row_y = HAND_Y_POSITION if row == 0 else HAND_Y_POSITION + 75  # 150 px below the top row
+		var dominos_in_this_row = 4 if row == 0 else 3
+		
+		var total_width = (dominos_in_this_row - 1) * CARD_WIDTH
+		var x_offset = center_screen_x + index_in_row * CARD_WIDTH - total_width / 2
+		
+		var new_position = Vector2(x_offset, row_y)
 		var domino = player_hand[i]
 		domino.starting_position = new_position
 		animate_domino_to_position(domino, new_position)
@@ -48,3 +60,10 @@ func remove_domino_from_hand(domino):
 	if domino in player_hand:
 		player_hand.erase(domino)
 		update_hand_position()
+
+func generate_all_dominos():
+	var all_dominos = []
+	for i in range(7):
+		for j in range(i, 7):
+			all_dominos.append([i, j])
+	return all_dominos

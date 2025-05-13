@@ -1,7 +1,6 @@
 extends Node
 
-@onready var HUD = preload("res://scenes/gameHUD.tscn").instantiate()
-var original_positions := {}
+signal domino_submitted(domino)
 
 func _ready() -> void:
 	var start_screen = $startScreen
@@ -14,3 +13,17 @@ func _on_start_game() -> void:
 	$dominoSlot.visible = true
 	$background.visible = false
 	$playerHand.visible = true
+	$subDom.visible = true
+
+
+func _on_sub_dom_pressed() -> void:
+	var slot = $dominoSlot
+	if slot.domino_in_slot:
+		var domino = get_node_or_null("dominoManager").domino_being_dragged
+		if domino == null:
+			for child in $dominoManager.get_children():
+				if child.is_locked:
+					domino = child
+					break
+		if domino:
+			emit_signal("domino_submitted", domino)
