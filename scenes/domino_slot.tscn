@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://o48jk4dckoer"]
+
+[ext_resource type="Texture2D" uid="uid://b37gpd3xe8ige" path="res://assets/dominos/blanks.png" id="1_gm450"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2xysc"]
+size = Vector2(101, 47)
+
+[node name="dominoSlot" type="Node2D"]
+
+[node name="dominoSlotImage" type="Sprite2D" parent="."]
+position = Vector2(1.52588e-05, 0)
+scale = Vector2(4.5, 4.1875)
+texture = ExtResource("1_gm450")
+region_enabled = true
+region_rect = Rect2(288.231, 0, 24.5692, 16)
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_2xysc")

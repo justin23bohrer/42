@@ -1,0 +1,37 @@
+[gd_scene load_steps=4 format=3 uid="uid://c8kjicutsl3ql"]
+
+[ext_resource type="Script" path="res://scripts/domino.gd" id="1_7bbmw"]
+[ext_resource type="Texture2D" uid="uid://b37gpd3xe8ige" path="res://assets/dominos/blanks.png" id="1_45hy6"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uwevp"]
+size = Vector2(103, 49)
+
+[node name="domino" type="Node2D"]
+script = ExtResource("1_7bbmw")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(3.8147e-06, -3.8147e-06)
+scale = Vector2(4.63, 4.375)
+texture = ExtResource("1_45hy6")
+region_enabled = true
+region_rect = Rect2(0, 0, 25.3107, 16)
+
+[node name="Label" type="Label" parent="."]
+offset_left = -47.0
+offset_top = -20.0
+offset_right = -6.0
+offset_bottom = 19.0
+
+[node name="Label2" type="Label" parent="."]
+offset_left = 3.0
+offset_top = -21.0
+offset_right = 47.0
+offset_bottom = 21.0
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_uwevp")
+
+[connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]
+[connection signal="mouse_exited" from="Area2D" to="." method="_on_area_2d_mouse_exited"]
