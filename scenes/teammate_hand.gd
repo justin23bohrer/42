@@ -20,7 +20,6 @@ func receive_domino_values(domino_values: Array):
 
 		get_node("../dominoManager").add_child(new_domino)
 		add_domino_to_hand(new_domino)
-		add_domino_to_hand(new_domino)
 		new_domino.update_domino_display_non_player()
 
 func add_domino_to_hand(domino):
@@ -62,3 +61,13 @@ func remove_domino_from_hand(domino):
 	if domino in player_hand:
 		player_hand.erase(domino)
 		update_hand_position()
+
+func present_domino(domino):
+	if domino in player_hand:
+		# Remove it from the hand and update remaining hand layout
+		remove_domino_from_hand(domino)
+
+		# Animate to center of the screen
+		var center_position = Vector2(center_screen_x, get_viewport().size.y / 2)
+		animate_domino_to_position(domino, center_position)
+	

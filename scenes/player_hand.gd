@@ -20,7 +20,7 @@ func receive_domino_values(domino_values: Array):
 
 		get_node("../dominoManager").add_child(new_domino)
 		add_domino_to_hand(new_domino)
-		add_domino_to_hand(new_domino)
+		new_domino.update_domino_display()
 
 func add_domino_to_hand(domino):
 	if domino not in player_hand:

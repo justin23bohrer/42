@@ -7,10 +7,5 @@ func _ready() -> void:
 	start_screen.start_pressed.connect(_on_start_game)
 
 func _on_start_game() -> void:
-	print("Start button was pressed!")
 	$startScreen.hide()
-	$dominoManager.visible = true
-	$dominoSlot.visible = true
-	$background.visible = false
-	$playerHand.visible = true
-	$subDom.visible = true
+	$"42game".visible = true

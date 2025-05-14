@@ -1,0 +1,59 @@
+[gd_scene load_steps=7 format=3 uid="uid://brx6e06tqnlpe"]
+
+[ext_resource type="Script" path="res://scripts/domino_manager.gd" id="1_emtyj"]
+[ext_resource type="PackedScene" uid="uid://o48jk4dckoer" path="res://scenes/domino_slot.tscn" id="2_cy4qi"]
+[ext_resource type="Script" path="res://scripts/domino_slot.gd" id="3_kpsxb"]
+[ext_resource type="Script" path="res://scenes/player_hand.gd" id="4_o0xru"]
+[ext_resource type="Script" path="res://scenes/teammate_hand.gd" id="5_vddux"]
+[ext_resource type="Script" path="res://scenes/game_manager.gd" id="6_wuefs"]
+
+[node name="42game" type="Node2D"]
+
+[node name="dominoManager" type="Node2D" parent="."]
+position = Vector2(1, 0)
+script = ExtResource("1_emtyj")
+
+[node name="dominoSlot" parent="." instance=ExtResource("2_cy4qi")]
+position = Vector2(498, 360)
+script = ExtResource("3_kpsxb")
+
+[node name="playerHand" type="Node2D" parent="."]
+script = ExtResource("4_o0xru")
+
+[node name="teammateHand" type="Node2D" parent="."]
+script = ExtResource("5_vddux")
+
+[node name="subDom" type="Button" parent="."]
+anchors_preset = -1
+anchor_left = 0.132
+anchor_top = 0.617
+anchor_right = 0.132
+anchor_bottom = 0.617
+offset_left = 124.0
+offset_top = 444.0
+offset_right = 332.0
+offset_bottom = 499.0
+theme_override_font_sizes/font_size = 34
+text = "Submit dom"
+
+[node name="gameManager" type="Node2D" parent="."]
+visible = false
+script = ExtResource("6_wuefs")
+
+[node name="myScore" type="Label" parent="."]
+offset_left = 15.0
+offset_top = 3.0
+offset_right = 266.0
+offset_bottom = 74.0
+theme_override_font_sizes/font_size = 40
+text = "My Score: 0"
+
+[node name="teammateScore" type="Label" parent="."]
+offset_left = 904.0
+offset_top = 4.0
+offset_right = 1273.0
+offset_bottom = 75.0
+theme_override_font_sizes/font_size = 40
+text = "Teammate Score: 0"
+
+[connection signal="pressed" from="subDom" to="gameManager" method="_on_sub_dom_pressed"]
