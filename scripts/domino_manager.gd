@@ -51,6 +51,7 @@ func finish_drag():
 			domino_being_dragged.position = domino_slot_found.position
 			domino_slot_found.get_node("Area2D/CollisionShape2D").disabled = true
 			domino_slot_found.domino_in_slot = true
+			domino_slot_found.domino = domino_being_dragged
 			domino_being_dragged.is_locked = true  
 		else:
 			player_hand_reference.add_domino_to_hand(domino_being_dragged)

@@ -14,16 +14,3 @@ func _on_start_game() -> void:
 	$background.visible = false
 	$playerHand.visible = true
 	$subDom.visible = true
-
-
-func _on_sub_dom_pressed() -> void:
-	var slot = $dominoSlot
-	if slot.domino_in_slot:
-		var domino = get_node_or_null("dominoManager").domino_being_dragged
-		if domino == null:
-			for child in $dominoManager.get_children():
-				if child.is_locked:
-					domino = child
-					break
-		if domino:
-			emit_signal("domino_submitted", domino)

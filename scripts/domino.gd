@@ -19,9 +19,12 @@ func update_domino_display():
 	print("Domino: ", left_value, "-", right_value)
 	$Label.text = str(left_value)
 	$Label2.text = str(right_value)
-
-func _process(delta: float) -> void:
-	pass
+func update_domino_display_non_player():
+	print("Domino: ", left_value, "-", right_value)
+	$Label.text = ""
+	$Label2.text = ""
+	$Area2D.set_deferred("monitoring", false)
+	$Area2D.get_node("CollisionShape2D").set_deferred("disabled", true)
 
 
 func _on_area_2d_mouse_entered() -> void:

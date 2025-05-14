@@ -2,7 +2,7 @@ extends Node2D
 
 const DOMINO_SCENE_PATH = "res://scenes/domino.tscn"
 const CARD_WIDTH = 120
-const HAND_Y_POSITION = 550
+const HAND_Y_POSITION = 50
 
 var player_hand = []
 var center_screen_x
@@ -21,6 +21,7 @@ func receive_domino_values(domino_values: Array):
 		get_node("../dominoManager").add_child(new_domino)
 		add_domino_to_hand(new_domino)
 		add_domino_to_hand(new_domino)
+		new_domino.update_domino_display_non_player()
 
 func add_domino_to_hand(domino):
 	if domino not in player_hand:
@@ -32,19 +33,20 @@ func add_domino_to_hand(domino):
 func update_hand_position():
 	var total = player_hand.size()
 	for i in range(total):
-		var row = 0 if i < 4 else 1
-		var index_in_row = i if row == 0 else i - 4
-		
-		var row_y = HAND_Y_POSITION if row == 0 else HAND_Y_POSITION + 75  # 150 px below the top row
-		var dominos_in_this_row = 4 if row == 0 else 3
-		
+		var row = 0 if i < 3 else 1  # First 3 go to row 0, rest to row 1
+		var index_in_row = i if row == 0 else i - 3
+
+		var row_y = HAND_Y_POSITION if row == 0 else HAND_Y_POSITION + 75  # Second row is lower
+		var dominos_in_this_row = 3 if row == 0 else 4
+
 		var total_width = (dominos_in_this_row - 1) * CARD_WIDTH
 		var x_offset = center_screen_x + index_in_row * CARD_WIDTH - total_width / 2
-		
+
 		var new_position = Vector2(x_offset, row_y)
 		var domino = player_hand[i]
 		domino.starting_position = new_position
 		animate_domino_to_position(domino, new_position)
+
 
 func calculate_domino_position(i):
 	var total_width = (player_hand.size() - 1) * CARD_WIDTH
