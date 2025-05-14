@@ -3,11 +3,11 @@
 [ext_resource type="Script" path="res://scripts/domino_manager.gd" id="1_emtyj"]
 [ext_resource type="PackedScene" uid="uid://o48jk4dckoer" path="res://scenes/domino_slot.tscn" id="2_cy4qi"]
 [ext_resource type="Script" path="res://scripts/domino_slot.gd" id="3_kpsxb"]
-[ext_resource type="Script" path="res://scenes/player_hand.gd" id="4_o0xru"]
-[ext_resource type="Script" path="res://scenes/teammate_hand.gd" id="5_vddux"]
-[ext_resource type="Script" path="res://scenes/game_manager.gd" id="6_wuefs"]
-[ext_resource type="Script" path="res://scenes/opponent_hand_1.gd" id="6_xnnqk"]
-[ext_resource type="Script" path="res://scenes/opponent_hand_2.gd" id="7_mjw1d"]
+[ext_resource type="Script" path="res://scripts/player_hand.gd" id="4_o0xru"]
+[ext_resource type="Script" path="res://scripts/teammate_hand.gd" id="5_vddux"]
+[ext_resource type="Script" path="res://scripts/game_manager.gd" id="6_wuefs"]
+[ext_resource type="Script" path="res://scripts/opponent_hand_1.gd" id="6_xnnqk"]
+[ext_resource type="Script" path="res://scripts/opponent_hand_2.gd" id="7_mjw1d"]
 
 [node name="42game" type="Node2D"]
 
