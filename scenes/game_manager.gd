@@ -16,10 +16,21 @@ func hand_players_dominos():
 
 	var player_hand_values = all_dominos.slice(0, 7)
 	var teammate_hand_values = all_dominos.slice(7, 14) 
+	var opponent_hand1_values = all_dominos.slice(14, 21)
+	var opponent_hand2_values = all_dominos.slice(21, 28)
+	 
+	#hand me dominos
 	var player_hand = get_node("../playerHand")
 	player_hand.receive_domino_values(player_hand_values)
+	#hand teammate dominos
 	var teammate_hand = get_node("../teammateHand")
 	teammate_hand.receive_domino_values(teammate_hand_values)
+	#hand opponent1 dominos
+	var opponent_hand1 = get_node("../opponentHand1")
+	opponent_hand1.receive_domino_values(opponent_hand1_values)
+	#hand opponent2 dominos
+	var opponent_hand2 = get_node("../opponentHand2")
+	opponent_hand2.receive_domino_values(opponent_hand2_values)
 
 # Generates a standard set of 28 dominos
 func generate_all_dominos():
@@ -59,7 +70,7 @@ func teammate_turn():
 		i.queue_free()
 		dominosInMiddle = []
 	teammate_put_domino_in_middle()
-			
+
 func teammate_put_domino_in_middle():
 	var hand_node = get_node("../teammateHand")  # Update this path to match your scene
 	if hand_node.player_hand.size() > 0:
@@ -69,12 +80,14 @@ func teammate_put_domino_in_middle():
 		dominosInMiddle.append(first_domino)
 	else:
 		present_final_score()
-		
+
+
 func present_final_score():
 	if myScore > teammateScore:
 		print("I win")
 	else:
 		print("you lost")
+
 # Handles a submitted domino
 func _on_domino_submitted(domino):
 	var slot = get_node("../dominoSlot")

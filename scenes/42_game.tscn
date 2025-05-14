@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://brx6e06tqnlpe"]
+[gd_scene load_steps=9 format=3 uid="uid://brx6e06tqnlpe"]
 
 [ext_resource type="Script" path="res://scripts/domino_manager.gd" id="1_emtyj"]
 [ext_resource type="PackedScene" uid="uid://o48jk4dckoer" path="res://scenes/domino_slot.tscn" id="2_cy4qi"]
@@ -6,6 +6,8 @@
 [ext_resource type="Script" path="res://scenes/player_hand.gd" id="4_o0xru"]
 [ext_resource type="Script" path="res://scenes/teammate_hand.gd" id="5_vddux"]
 [ext_resource type="Script" path="res://scenes/game_manager.gd" id="6_wuefs"]
+[ext_resource type="Script" path="res://scenes/opponent_hand_1.gd" id="6_xnnqk"]
+[ext_resource type="Script" path="res://scenes/opponent_hand_2.gd" id="7_mjw1d"]
 
 [node name="42game" type="Node2D"]
 
@@ -23,16 +25,22 @@ script = ExtResource("4_o0xru")
 [node name="teammateHand" type="Node2D" parent="."]
 script = ExtResource("5_vddux")
 
+[node name="opponentHand1" type="Node2D" parent="."]
+script = ExtResource("6_xnnqk")
+
+[node name="opponentHand2" type="Node2D" parent="."]
+script = ExtResource("7_mjw1d")
+
 [node name="subDom" type="Button" parent="."]
 anchors_preset = -1
 anchor_left = 0.132
 anchor_top = 0.617
 anchor_right = 0.132
 anchor_bottom = 0.617
-offset_left = 124.0
-offset_top = 444.0
-offset_right = 332.0
-offset_bottom = 499.0
+offset_left = 18.0
+offset_top = 649.0
+offset_right = 226.0
+offset_bottom = 704.0
 theme_override_font_sizes/font_size = 34
 text = "Submit dom"
 
