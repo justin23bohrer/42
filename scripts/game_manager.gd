@@ -10,45 +10,79 @@ const FOURTH_PLAYER = Vector2(740, 360)
 var myScore = 0
 var opponentScore = 0
 var dominosInMiddle = []
-var turns = [1,2,3,4]
-var turn_counter = 0
+var player_rotation = ["me","op1","tm8","op2"]
 var domsThatTurn = {}
+var winning_player = "me"
 
 # Called when the node is added to the scene
 func _ready():
 	$"../coin".play("default")
 
-func turn():
-	domsThatTurn = {
-		"op1": [],
-		"tm8": [],
-		"op2": [],
-		"me": []
-	}
-	$"../Timer".start()
-	await $"../Timer".timeout
-	ai_plays_dom("op1", FIRST_PLAYER)
-	$"../Timer".start()
-	await $"../Timer".timeout
-	ai_plays_dom("tm8", SECOND_PLAYER)
-	$"../Timer".start()
-	await $"../Timer".timeout
-	ai_plays_dom("op2", THIRD_PLAYER)
-	$"../Timer".start()
-	await $"../Timer".timeout
-	$"../dominoSlot".visible = true
-	$"../dominoSlot".position = FOURTH_PLAYER
-	$"../subDom".visible = true
-	turn_counter = 0
+func turn(turn, player):
+	print(player)
+	var placement
+	match turn:
+		0:
+			placement = FIRST_PLAYER
+		1:
+			placement = SECOND_PLAYER
+		2:
+			placement = THIRD_PLAYER
+		3:
+			placement = FOURTH_PLAYER
+	if player in ["op1", "op2", "tm8"]:
+		$"../Timer".start()
+		await $"../Timer".timeout
+		ai_plays_dom(player, placement)
+	else:
+		$"../dominoSlot".visible = true
+		$"../dominoSlot".position = placement
+		$"../subDom".visible = true
+
+func play_round():
+	for i in range(7):
+		domsThatTurn = {
+			"op1": [],
+			"tm8": [],
+			"op2": [],
+			"me": []
+		}
+		rotate_players()
+		for y in player_rotation.size():
+			var player = player_rotation[y]
+			await turn(y, player)
+			if player == "me":
+				await self.domino_submitted
+			$"../Timer".start()
+			await $"../Timer".timeout
+		domino_accountant()
+		$"../endRound".start()
+		await $"../endRound".timeout
+	#clear doms
+		for j in dominosInMiddle:
+			j.queue_free()
+		dominosInMiddle = []
+		print(winning_player)
+
+func rotate_players():
+	var index = player_rotation.find(winning_player)
+	if index == -1:
+		print("Winning player not in rotation")
+		return
+	
+	var new_rotation = []
+	for i in range(player_rotation.size()):
+		var rotated_index = (index + i) % player_rotation.size()
+		new_rotation.append(player_rotation[rotated_index])
+	
+	player_rotation = new_rotation
+	print(player_rotation)
 
 func run_game():
 	$"../startGame".visible = false
 	hand_players_dominos()
-	for i in range(7):
-		await turn()
-		await self.domino_submitted
+	await play_round()
 	present_final_score()
-	$"../startGame".visible = true
 
 # Handles dealing dominos to the player's hand
 func hand_players_dominos():
@@ -94,22 +128,12 @@ func _on_sub_dom_pressed() -> void:
 
 	#submitting dom in slot
 	var domino = slot.domino
-	_on_domino_submitted(domino)
+	dominosInMiddle.append(domino)
 	domsThatTurn["me"].append([domino.left_value, domino.right_value])
-	domino_accountant()
-	#clear doms
-	for i in dominosInMiddle:
-		i.queue_free()
-	dominosInMiddle = []
-
-	emit_signal("domino_submitted")
-
-func _on_domino_submitted(domino):
-	var slot = get_node("../dominoSlot")
 	slot.domino_in_slot = false
 	slot.get_node("Area2D/CollisionShape2D").disabled = false
-	domino.queue_free()
-	
+
+	emit_signal("domino_submitted")
 
 func ai_plays_dom(player, location):
 	var hand_node
@@ -143,10 +167,10 @@ func ai_plays_dom(player, location):
 
 func domino_accountant():
 	print(domsThatTurn)
-	var best_player = get_player_with_biggest_domino()
-	if best_player == "me" or best_player == "tm8":
+	winning_player = get_player_with_biggest_domino()
+	if winning_player == "me" or winning_player == "tm8":
 		myScore += 1
-	if best_player == "op1" or best_player == "op2":
+	if winning_player == "op1" or winning_player == "op2":
 		opponentScore += 1
 	update_score()
 	

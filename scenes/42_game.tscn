@@ -193,6 +193,9 @@ speed_scale = 5.0
 [node name="Timer" type="Timer" parent="."]
 one_shot = true
 
+[node name="endRound" type="Timer" parent="."]
+wait_time = 2.59
+
 [node name="startGame" type="Button" parent="."]
 offset_left = 514.0
 offset_top = 295.0
