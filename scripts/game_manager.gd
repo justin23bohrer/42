@@ -1,23 +1,30 @@
 extends Node
 
+const FIRST_PLAYER = Vector2(536, 360)
+const SECOND_PLAYER = Vector2(604, 360)
+const THIRD_PLAYER = Vector2(672, 360)
+const FOURTH_PLAYER = Vector2(740, 360)
+
 var myScore = 0
 var opponentScore = 0
 var dominosInMiddle = []
+var turns = [1,2,3,4]
+var turn_counter = 0
 
 # Called when the node is added to the scene
 func _ready():
-	hand_players_dominos()
-	teammate_put_domino_in_middle()
-	opponent1_put_domino_in_middle()
-	opponent2_put_domino_in_middle()
+	run_game()
 	$"../coin".play("default")
 
 func run_game():
 	myScore = 0
 	opponentScore = 0
 	hand_players_dominos()
-	
-	
+	opponent1_put_domino_in_middle(FIRST_PLAYER)
+	opponent2_put_domino_in_middle(SECOND_PLAYER)
+	teammate_put_domino_in_middle(THIRD_PLAYER)
+	$"../dominoSlot".position = FOURTH_PLAYER
+	turn_counter = 0
 
 # Handles dealing dominos to the player's hand
 func hand_players_dominos():
@@ -68,35 +75,36 @@ func teammate_turn():
 	for i in dominosInMiddle:
 		i.queue_free()
 		dominosInMiddle = []
-	teammate_put_domino_in_middle()
-	opponent1_put_domino_in_middle()
-	opponent2_put_domino_in_middle()
 	
-func opponent1_put_domino_in_middle():
+	opponent1_put_domino_in_middle(FIRST_PLAYER)
+	opponent2_put_domino_in_middle(SECOND_PLAYER)
+	teammate_put_domino_in_middle(THIRD_PLAYER)
+	
+func opponent1_put_domino_in_middle(location):
 	var hand_node = get_node("../opponentHand1") 
 	if hand_node.player_hand.size() > 0:
 		var first_domino = hand_node.player_hand[0]
-		hand_node.present_domino(first_domino)
+		hand_node.present_domino(first_domino, location)
 		first_domino.update_domino_display()
 		dominosInMiddle.append(first_domino)
 	else:
 		present_final_score()
 
-func opponent2_put_domino_in_middle():
+func opponent2_put_domino_in_middle(location):
 	var hand_node = get_node("../opponentHand2") 
 	if hand_node.player_hand.size() > 0:
 		var first_domino = hand_node.player_hand[0]
-		hand_node.present_domino(first_domino)
+		hand_node.present_domino(first_domino, location)
 		first_domino.update_domino_display()
 		dominosInMiddle.append(first_domino)
 	else:
 		present_final_score()
 
-func teammate_put_domino_in_middle():
+func teammate_put_domino_in_middle(location):
 	var hand_node = get_node("../teammateHand") 
 	if hand_node.player_hand.size() > 0:
 		var first_domino = hand_node.player_hand[0]
-		hand_node.present_domino(first_domino)
+		hand_node.present_domino(first_domino, location)
 		first_domino.update_domino_display()
 		dominosInMiddle.append(first_domino)
 	else:

@@ -65,12 +65,12 @@ func remove_domino_from_hand(domino):
 		player_hand.erase(domino)
 		update_hand_position()
 
-func present_domino(domino):
+func present_domino(domino, location):
 	if domino in player_hand:
 		# Remove it from the hand and update remaining hand layout
 		remove_domino_from_hand(domino)
-
+		domino.rotation = deg_to_rad(90)
 		# Animate to center of the screen
-		var center_position = Vector2(center_screen_x, get_viewport().size.y / 2)
+		var center_position = location
 		animate_domino_to_position(domino, center_position)
 	
