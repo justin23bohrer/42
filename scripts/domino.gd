@@ -15,11 +15,40 @@ func _ready() -> void:
 	get_parent().connect_domino_signals(self)
 
 func update_domino_display():
-	$Label.text = str(left_value)
-	$Label2.text = str(right_value)
+	match left_value:
+		0:
+			$left.texture = ResourceLoader.load("res://assets/dominos/dominoNumbers/0.png")
+		1:
+			$left.texture = ResourceLoader.load("res://assets/dominos/dominoNumbers/1.png")
+		2:
+			$left.texture = ResourceLoader.load("res://assets/dominos/dominoNumbers/2.png")
+		3:
+			$left.texture = ResourceLoader.load("res://assets/dominos/dominoNumbers/3.png")
+		4:
+			$left.texture = ResourceLoader.load("res://assets/dominos/dominoNumbers/4.png")
+		5:
+			$left.texture = ResourceLoader.load("res://assets/dominos/dominoNumbers/5.png")
+		6:
+			$left.texture = ResourceLoader.load("res://assets/dominos/dominoNumbers/6.png")
+	match right_value:
+		0:
+			$right.texture = ResourceLoader.load("res://assets/dominos/dominoNumbers/0.png")
+		1:
+			$right.texture = ResourceLoader.load("res://assets/dominos/dominoNumbers/1.png")
+		2:
+			$right.texture = ResourceLoader.load("res://assets/dominos/dominoNumbers/2.png")
+		3:
+			$right.texture = ResourceLoader.load("res://assets/dominos/dominoNumbers/3.png")
+		4:
+			$right.texture = ResourceLoader.load("res://assets/dominos/dominoNumbers/4.png")
+		5:
+			$right.texture = ResourceLoader.load("res://assets/dominos/dominoNumbers/5.png")
+		6:
+			$right.texture = ResourceLoader.load("res://assets/dominos/dominoNumbers/6.png")
+
 func update_domino_display_non_player():
-	$Label.text = ""
-	$Label2.text = ""
+	$left.texture = ResourceLoader.load("res://assets/dominos/dominoNumbers/0.png")
+	$right.texture = ResourceLoader.load("res://assets/dominos/dominoNumbers/0.png")
 	$Area2D.set_deferred("monitoring", false)
 	$Area2D.get_node("CollisionShape2D").set_deferred("disabled", true)
 

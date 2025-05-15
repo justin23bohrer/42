@@ -16,32 +16,22 @@ texture = ExtResource("1_45hy6")
 region_enabled = true
 region_rect = Rect2(0, 0, 25.3107, 16)
 
-[node name="Label" type="Label" parent="."]
-offset_left = -47.0
-offset_top = -20.0
-offset_right = -6.0
-offset_bottom = 19.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 30
-text = "0"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Label2" type="Label" parent="."]
-offset_left = 3.0
-offset_top = -21.0
-offset_right = 47.0
-offset_bottom = 21.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 30
-text = "0"
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("RectangleShape2D_uwevp")
+
+[node name="left" type="TextureRect" parent="."]
+offset_left = -49.0
+offset_top = -22.0
+offset_right = -3.0
+offset_bottom = 22.0
+
+[node name="right" type="TextureRect" parent="."]
+offset_left = 2.0
+offset_top = -22.0
+offset_right = 48.0
+offset_bottom = 22.0
 
 [connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]
 [connection signal="mouse_exited" from="Area2D" to="." method="_on_area_2d_mouse_exited"]
