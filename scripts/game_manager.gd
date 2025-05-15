@@ -1,13 +1,23 @@
 extends Node
 
 var myScore = 0
-var teammateScore = 0
+var opponentScore = 0
 var dominosInMiddle = []
 
 # Called when the node is added to the scene
 func _ready():
 	hand_players_dominos()
 	teammate_put_domino_in_middle()
+	opponent1_put_domino_in_middle()
+	opponent2_put_domino_in_middle()
+	$"../coin".play("default")
+
+func run_game():
+	myScore = 0
+	opponentScore = 0
+	hand_players_dominos()
+	
+	
 
 # Handles dealing dominos to the player's hand
 func hand_players_dominos():
@@ -55,24 +65,35 @@ func teammate_turn():
 		var domino = slot.domino
 		if domino:
 			_on_domino_submitted(domino)
-			var teammateDomino = dominosInMiddle[0]
-			if teammateDomino.left_value > domino.left_value:
-				teammateScore += 1
-			if teammateDomino.left_value == domino.left_value:
-				if teammateDomino.right_value > domino.right_value: 
-					teammateScore += 1 
-				else:
-					myScore += 1
-			if teammateDomino.left_value < domino.left_value:
-				myScore += 1
-			update_score()
 	for i in dominosInMiddle:
 		i.queue_free()
 		dominosInMiddle = []
 	teammate_put_domino_in_middle()
+	opponent1_put_domino_in_middle()
+	opponent2_put_domino_in_middle()
+	
+func opponent1_put_domino_in_middle():
+	var hand_node = get_node("../opponentHand1") 
+	if hand_node.player_hand.size() > 0:
+		var first_domino = hand_node.player_hand[0]
+		hand_node.present_domino(first_domino)
+		first_domino.update_domino_display()
+		dominosInMiddle.append(first_domino)
+	else:
+		present_final_score()
+
+func opponent2_put_domino_in_middle():
+	var hand_node = get_node("../opponentHand2") 
+	if hand_node.player_hand.size() > 0:
+		var first_domino = hand_node.player_hand[0]
+		hand_node.present_domino(first_domino)
+		first_domino.update_domino_display()
+		dominosInMiddle.append(first_domino)
+	else:
+		present_final_score()
 
 func teammate_put_domino_in_middle():
-	var hand_node = get_node("../teammateHand")  # Update this path to match your scene
+	var hand_node = get_node("../teammateHand") 
 	if hand_node.player_hand.size() > 0:
 		var first_domino = hand_node.player_hand[0]
 		hand_node.present_domino(first_domino)
@@ -83,7 +104,7 @@ func teammate_put_domino_in_middle():
 
 
 func present_final_score():
-	if myScore > teammateScore:
+	if myScore > opponentScore:
 		print("I win")
 	else:
 		print("you lost")
@@ -96,5 +117,5 @@ func _on_domino_submitted(domino):
 	domino.queue_free()
 
 func update_score():
-	$"../myScore".text = "My Score: " + str(myScore)
-	$"../teammateScore".text = "Teammate Score: " + str(teammateScore)
+	$"../myScore".text = "Our Score: " + str(myScore)
+	$"../opponentScore".text = "Opponent Score: " + str(opponentScore)

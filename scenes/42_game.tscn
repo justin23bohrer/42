@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://brx6e06tqnlpe"]
+[gd_scene load_steps=26 format=3 uid="uid://brx6e06tqnlpe"]
 
 [ext_resource type="Script" path="res://scripts/domino_manager.gd" id="1_emtyj"]
 [ext_resource type="PackedScene" uid="uid://o48jk4dckoer" path="res://scenes/domino_slot.tscn" id="2_cy4qi"]
@@ -8,15 +8,134 @@
 [ext_resource type="Script" path="res://scripts/game_manager.gd" id="6_wuefs"]
 [ext_resource type="Script" path="res://scripts/opponent_hand_1.gd" id="6_xnnqk"]
 [ext_resource type="Script" path="res://scripts/opponent_hand_2.gd" id="7_mjw1d"]
+[ext_resource type="Texture2D" uid="uid://cy1qnxemur2r1" path="res://assets/coin/coin1_16x16.png" id="9_vcm17"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bycrx"]
+atlas = ExtResource("9_vcm17")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3k5c0"]
+atlas = ExtResource("9_vcm17")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n7ram"]
+atlas = ExtResource("9_vcm17")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_odoih"]
+atlas = ExtResource("9_vcm17")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_no2lj"]
+atlas = ExtResource("9_vcm17")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_miovp"]
+atlas = ExtResource("9_vcm17")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ew54m"]
+atlas = ExtResource("9_vcm17")
+region = Rect2(96, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mp52s"]
+atlas = ExtResource("9_vcm17")
+region = Rect2(112, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lwkfs"]
+atlas = ExtResource("9_vcm17")
+region = Rect2(128, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4m5wg"]
+atlas = ExtResource("9_vcm17")
+region = Rect2(144, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1318x"]
+atlas = ExtResource("9_vcm17")
+region = Rect2(160, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4s4x8"]
+atlas = ExtResource("9_vcm17")
+region = Rect2(176, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oj7pj"]
+atlas = ExtResource("9_vcm17")
+region = Rect2(192, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_87eef"]
+atlas = ExtResource("9_vcm17")
+region = Rect2(208, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8hfvs"]
+atlas = ExtResource("9_vcm17")
+region = Rect2(224, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_vuva4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bycrx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3k5c0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n7ram")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_odoih")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_no2lj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_miovp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ew54m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mp52s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lwkfs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4m5wg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1318x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4s4x8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oj7pj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_87eef")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8hfvs")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [node name="42game" type="Node2D"]
+
+[node name="gameManager" type="Node2D" parent="."]
+visible = false
+script = ExtResource("6_wuefs")
 
 [node name="dominoManager" type="Node2D" parent="."]
 position = Vector2(1, 0)
 script = ExtResource("1_emtyj")
 
 [node name="dominoSlot" parent="." instance=ExtResource("2_cy4qi")]
-position = Vector2(498, 360)
+position = Vector2(536, 360)
+rotation = 1.5708
 script = ExtResource("3_kpsxb")
 
 [node name="playerHand" type="Node2D" parent="."]
@@ -37,16 +156,15 @@ anchor_left = 0.132
 anchor_top = 0.617
 anchor_right = 0.132
 anchor_bottom = 0.617
-offset_left = 18.0
-offset_top = 649.0
-offset_right = 226.0
-offset_bottom = 704.0
-theme_override_font_sizes/font_size = 34
-text = "Submit dom"
-
-[node name="gameManager" type="Node2D" parent="."]
-visible = false
-script = ExtResource("6_wuefs")
+offset_left = 548.0
+offset_top = 667.0
+offset_right = 734.0
+offset_bottom = 711.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_vertical = 8
+theme_override_font_sizes/font_size = 26
+text = "Finish Turn"
 
 [node name="myScore" type="Label" parent="."]
 offset_left = 15.0
@@ -54,7 +172,7 @@ offset_top = 3.0
 offset_right = 266.0
 offset_bottom = 74.0
 theme_override_font_sizes/font_size = 40
-text = "My Score: 0"
+text = "Our Score: 0"
 
 [node name="teammateScore" type="Label" parent="."]
 offset_left = 904.0
@@ -62,6 +180,12 @@ offset_top = 4.0
 offset_right = 1273.0
 offset_bottom = 75.0
 theme_override_font_sizes/font_size = 40
-text = "Teammate Score: 0"
+text = "Opponent Score: 0"
+
+[node name="coin" type="AnimatedSprite2D" parent="."]
+position = Vector2(1216, 669)
+scale = Vector2(3.1458, 3.5063)
+sprite_frames = SubResource("SpriteFrames_vuva4")
+speed_scale = 5.0
 
 [connection signal="pressed" from="subDom" to="gameManager" method="_on_sub_dom_pressed"]

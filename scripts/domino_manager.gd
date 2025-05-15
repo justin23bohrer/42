@@ -22,6 +22,11 @@ func _process(delta: float) -> void:
 		var mouse_pos = get_global_mouse_position()
 		domino_being_dragged.position = Vector2(clamp(mouse_pos.x, 0, screen_size.x),
 			clamp(mouse_pos.y, 0, screen_size.y))
+	var domino_slot_found = raycast_check_for_domino_slot()
+	if domino_being_dragged and domino_slot_found:
+		domino_being_dragged.rotation = deg_to_rad(90)
+	if domino_being_dragged and !domino_slot_found:
+		domino_being_dragged.rotation = 0
 	
 
 func _input(event):

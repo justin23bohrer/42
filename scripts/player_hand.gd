@@ -5,7 +5,7 @@ const CARD_WIDTH = 120
 const HAND_Y_POSITION = 550
 
 var player_hand = []
-var center_screen_x
+var center_screen_x = 0.0
 
 func _ready():
 	center_screen_x = get_viewport().size.x / 2
@@ -30,17 +30,19 @@ func add_domino_to_hand(domino):
 		animate_domino_to_position(domino, domino.starting_position)
 	
 func update_hand_position():
+	center_screen_x = get_viewport().size.x / 2
+
 	var total = player_hand.size()
 	for i in range(total):
 		var row = 0 if i < 4 else 1
 		var index_in_row = i if row == 0 else i - 4
-		
-		var row_y = HAND_Y_POSITION if row == 0 else HAND_Y_POSITION + 75  # 150 px below the top row
+
+		var row_y = HAND_Y_POSITION if row == 0 else HAND_Y_POSITION + 75
 		var dominos_in_this_row = 4 if row == 0 else 3
-		
+
 		var total_width = (dominos_in_this_row - 1) * CARD_WIDTH
 		var x_offset = center_screen_x + index_in_row * CARD_WIDTH - total_width / 2
-		
+
 		var new_position = Vector2(x_offset, row_y)
 		var domino = player_hand[i]
 		domino.starting_position = new_position
