@@ -10,12 +10,19 @@ var opponentScore = 0
 var dominosInMiddle = []
 var turns = [1,2,3,4]
 var turn_counter = 0
+var domsThatTurn = {}
 
 # Called when the node is added to the scene
 func _ready():
 	$"../coin".play("default")
 
 func turn():
+	domsThatTurn = {
+		"op1": [],
+		"tm8": [],
+		"op2": [],
+		"me": []
+	}
 	$"../Timer".start()
 	await $"../Timer".timeout
 	opponent1_put_domino_in_middle(FIRST_PLAYER)
@@ -78,9 +85,9 @@ func _on_sub_dom_pressed() -> void:
 	$"../dominoSlot".visible = false
 	var slot = get_node("../dominoSlot")
 	if slot.domino_in_slot:
-		teammate_turn()
+		clean_up_board()
 
-func teammate_turn():
+func clean_up_board():
 	#$"../subDom".visible = false
 	#$"../subDom".disabled = true
 	var slot = get_node("../dominoSlot")
@@ -89,9 +96,16 @@ func teammate_turn():
 		var domino = slot.domino
 		if domino:
 			_on_domino_submitted(domino)
+			domsThatTurn["me"].append([domino.left_value,domino.right_value])
+	domino_accountant()
 	for i in dominosInMiddle:
 		i.queue_free()
 		dominosInMiddle = []
+func _on_domino_submitted(domino):
+	var slot = get_node("../dominoSlot")
+	slot.domino_in_slot = false
+	slot.get_node("Area2D/CollisionShape2D").disabled = false
+	domino.queue_free()
 	
 
 func opponent1_put_domino_in_middle(location):
@@ -101,6 +115,7 @@ func opponent1_put_domino_in_middle(location):
 		hand_node.present_domino(first_domino, location)
 		first_domino.update_domino_display()
 		dominosInMiddle.append(first_domino)
+		domsThatTurn["op1"].append([first_domino.left_value,first_domino.right_value])
 	else:
 		present_final_score()
 
@@ -111,6 +126,7 @@ func opponent2_put_domino_in_middle(location):
 		hand_node.present_domino(first_domino, location)
 		first_domino.update_domino_display()
 		dominosInMiddle.append(first_domino)
+		domsThatTurn["op2"].append([first_domino.left_value,first_domino.right_value])
 	else:
 		present_final_score()
 
@@ -121,22 +137,18 @@ func teammate_put_domino_in_middle(location):
 		hand_node.present_domino(first_domino, location)
 		first_domino.update_domino_display()
 		dominosInMiddle.append(first_domino)
+		domsThatTurn["tm8"].append([first_domino.left_value,first_domino.right_value])
 	else:
 		present_final_score()
 
+func domino_accountant():
+	print(domsThatTurn)
 
 func present_final_score():
 	if myScore > opponentScore:
 		print("I win")
 	else:
 		print("you lost")
-
-# Handles a submitted domino
-func _on_domino_submitted(domino):
-	var slot = get_node("../dominoSlot")
-	slot.domino_in_slot = false
-	slot.get_node("Area2D/CollisionShape2D").disabled = false
-	domino.queue_free()
 
 func update_score():
 	$"../myScore".text = "Our Score: " + str(myScore)
