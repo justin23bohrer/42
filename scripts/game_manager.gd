@@ -41,12 +41,12 @@ func turn():
 
 func run_game():
 	$"../startGame".visible = false
-	myScore = 0
-	opponentScore = 0
 	hand_players_dominos()
 	for i in range(7):
 		await turn()
 		await $"../subDom".pressed
+	present_final_score()
+	$"../startGame".visible = true
 
 # Handles dealing dominos to the player's hand
 func hand_players_dominos():
@@ -109,40 +109,64 @@ func _on_domino_submitted(domino):
 	
 
 func opponent1_put_domino_in_middle(location):
-	var hand_node = get_node("../opponentHand1") 
+	var hand_node = get_node("../opponentHand1")
 	if hand_node.player_hand.size() > 0:
-		var first_domino = hand_node.player_hand[0]
-		hand_node.present_domino(first_domino, location)
-		first_domino.update_domino_display()
-		dominosInMiddle.append(first_domino)
-		domsThatTurn["op1"].append([first_domino.left_value,first_domino.right_value])
-	else:
-		present_final_score()
+		var highest_domino = hand_node.player_hand[0]
+		for domino in hand_node.player_hand:
+			if domino.left_value + domino.right_value > highest_domino.left_value + highest_domino.right_value:
+				highest_domino = domino
+
+		hand_node.present_domino(highest_domino, location)
+		highest_domino.update_domino_display()
+		dominosInMiddle.append(highest_domino)
+		domsThatTurn["op1"].append([highest_domino.left_value, highest_domino.right_value])
 
 func opponent2_put_domino_in_middle(location):
-	var hand_node = get_node("../opponentHand2") 
+	var hand_node = get_node("../opponentHand2")
 	if hand_node.player_hand.size() > 0:
-		var first_domino = hand_node.player_hand[0]
-		hand_node.present_domino(first_domino, location)
-		first_domino.update_domino_display()
-		dominosInMiddle.append(first_domino)
-		domsThatTurn["op2"].append([first_domino.left_value,first_domino.right_value])
-	else:
-		present_final_score()
+		var highest_domino = hand_node.player_hand[0]
+		for domino in hand_node.player_hand:
+			if domino.left_value + domino.right_value > highest_domino.left_value + highest_domino.right_value:
+				highest_domino = domino
+
+		hand_node.present_domino(highest_domino, location)
+		highest_domino.update_domino_display()
+		dominosInMiddle.append(highest_domino)
+		domsThatTurn["op2"].append([highest_domino.left_value, highest_domino.right_value])
 
 func teammate_put_domino_in_middle(location):
-	var hand_node = get_node("../teammateHand") 
+	var hand_node = get_node("../teammateHand")
 	if hand_node.player_hand.size() > 0:
-		var first_domino = hand_node.player_hand[0]
-		hand_node.present_domino(first_domino, location)
-		first_domino.update_domino_display()
-		dominosInMiddle.append(first_domino)
-		domsThatTurn["tm8"].append([first_domino.left_value,first_domino.right_value])
-	else:
-		present_final_score()
+		var highest_domino = hand_node.player_hand[0]
+		for domino in hand_node.player_hand:
+			if domino.left_value + domino.right_value > highest_domino.left_value + highest_domino.right_value:
+				highest_domino = domino
+
+		hand_node.present_domino(highest_domino, location)
+		highest_domino.update_domino_display()
+		dominosInMiddle.append(highest_domino)
+		domsThatTurn["tm8"].append([highest_domino.left_value, highest_domino.right_value])
 
 func domino_accountant():
-	print(domsThatTurn)
+	var best_player = get_player_with_biggest_domino()
+	if best_player == "me" or best_player == "tm8":
+		myScore += 1
+	if best_player == "op1" or best_player == "op2":
+		opponentScore += 1
+	update_score()
+	
+func get_player_with_biggest_domino() -> String:
+	var highest_sum = -1
+	var best_player = ""
+
+	for player in domsThatTurn.keys():
+		for domino in domsThatTurn[player]:
+			var domino_sum = domino[0] + domino[1]
+			if domino_sum > highest_sum:
+				highest_sum = domino_sum
+				best_player = player
+
+	return best_player
 
 func present_final_score():
 	if myScore > opponentScore:
@@ -156,4 +180,7 @@ func update_score():
 
 
 func _on_start_game_pressed() -> void:
+	myScore = 0
+	opponentScore = 0
+	update_score()
 	run_game()
