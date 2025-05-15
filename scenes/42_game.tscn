@@ -185,6 +185,7 @@ theme_override_font_sizes/font_size = 40
 text = "Opponent Score: 0"
 
 [node name="coin" type="AnimatedSprite2D" parent="."]
+visible = false
 position = Vector2(1216, 669)
 scale = Vector2(3.1458, 3.5063)
 sprite_frames = SubResource("SpriteFrames_vuva4")

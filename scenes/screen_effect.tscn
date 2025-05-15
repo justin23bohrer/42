@@ -12,18 +12,18 @@ shader_parameter/resolution = Vector2(640, 480)
 shader_parameter/pixelate = true
 shader_parameter/roll = false
 shader_parameter/roll_speed = 5.0
-shader_parameter/roll_size = 0.0
-shader_parameter/roll_variation = 0.123
+shader_parameter/roll_size = 5.226
+shader_parameter/roll_variation = 0.207
 shader_parameter/distort_intensity = 0.05
-shader_parameter/noise_opacity = 0.0
+shader_parameter/noise_opacity = 0.247
 shader_parameter/noise_speed = 5.0
 shader_parameter/static_noise_intensity = 0.06
 shader_parameter/aberration = 4.75e-08
 shader_parameter/brightness = 0.985
 shader_parameter/discolor = false
 shader_parameter/warp_amount = 0.0
-shader_parameter/clip_warp = false
-shader_parameter/vignette_intensity = 0.4
+shader_parameter/clip_warp = true
+shader_parameter/vignette_intensity = 0.935
 shader_parameter/vignette_opacity = 0.5
 
 [node name="screenEffect" type="CanvasLayer"]
