@@ -1,5 +1,7 @@
 extends Node
 
+signal domino_submitted
+
 const FIRST_PLAYER = Vector2(536, 360)
 const SECOND_PLAYER = Vector2(604, 360)
 const THIRD_PLAYER = Vector2(672, 360)
@@ -25,13 +27,13 @@ func turn():
 	}
 	$"../Timer".start()
 	await $"../Timer".timeout
-	opponent1_put_domino_in_middle(FIRST_PLAYER)
+	ai_plays_dom("op1", FIRST_PLAYER)
 	$"../Timer".start()
 	await $"../Timer".timeout
-	teammate_put_domino_in_middle(SECOND_PLAYER)
+	ai_plays_dom("tm8", SECOND_PLAYER)
 	$"../Timer".start()
 	await $"../Timer".timeout
-	opponent2_put_domino_in_middle(THIRD_PLAYER)
+	ai_plays_dom("op2", THIRD_PLAYER)
 	$"../Timer".start()
 	await $"../Timer".timeout
 	$"../dominoSlot".visible = true
@@ -44,7 +46,7 @@ func run_game():
 	hand_players_dominos()
 	for i in range(7):
 		await turn()
-		await $"../subDom".pressed
+		await self.domino_submitted
 	present_final_score()
 	$"../startGame".visible = true
 
@@ -81,26 +83,27 @@ func generate_all_dominos():
 
 # Called when the submit button is pressed
 func _on_sub_dom_pressed() -> void:
+	var slot = get_node("../dominoSlot")
+
+	# If no domino is placed, just return 
+	if not slot.domino_in_slot or not slot.domino:
+		return
+
 	$"../subDom".visible = false
 	$"../dominoSlot".visible = false
-	var slot = get_node("../dominoSlot")
-	if slot.domino_in_slot:
-		clean_up_board()
 
-func clean_up_board():
-	#$"../subDom".visible = false
-	#$"../subDom".disabled = true
-	var slot = get_node("../dominoSlot")
-	
-	if slot.domino_in_slot:
-		var domino = slot.domino
-		if domino:
-			_on_domino_submitted(domino)
-			domsThatTurn["me"].append([domino.left_value,domino.right_value])
+	#submitting dom in slot
+	var domino = slot.domino
+	_on_domino_submitted(domino)
+	domsThatTurn["me"].append([domino.left_value, domino.right_value])
 	domino_accountant()
+	#clear doms
 	for i in dominosInMiddle:
 		i.queue_free()
-		dominosInMiddle = []
+	dominosInMiddle = []
+
+	emit_signal("domino_submitted")
+
 func _on_domino_submitted(domino):
 	var slot = get_node("../dominoSlot")
 	slot.domino_in_slot = false
@@ -108,8 +111,17 @@ func _on_domino_submitted(domino):
 	domino.queue_free()
 	
 
-func opponent1_put_domino_in_middle(location):
-	var hand_node = get_node("../opponentHand1")
+func ai_plays_dom(player, location):
+	var hand_node
+	match player:
+		"op1":
+			hand_node = get_node("../opponentHand1")
+		"op2":
+			hand_node = get_node("../opponentHand2")
+		"tm8":
+			hand_node = get_node("../teammateHand")
+		_:
+			print("Something terribly wrong has happen")
 	if hand_node.player_hand.size() > 0:
 		var highest_domino = hand_node.player_hand[0]
 		for domino in hand_node.player_hand:
@@ -119,35 +131,18 @@ func opponent1_put_domino_in_middle(location):
 		hand_node.present_domino(highest_domino, location)
 		highest_domino.update_domino_display()
 		dominosInMiddle.append(highest_domino)
-		domsThatTurn["op1"].append([highest_domino.left_value, highest_domino.right_value])
-
-func opponent2_put_domino_in_middle(location):
-	var hand_node = get_node("../opponentHand2")
-	if hand_node.player_hand.size() > 0:
-		var highest_domino = hand_node.player_hand[0]
-		for domino in hand_node.player_hand:
-			if domino.left_value + domino.right_value > highest_domino.left_value + highest_domino.right_value:
-				highest_domino = domino
-
-		hand_node.present_domino(highest_domino, location)
-		highest_domino.update_domino_display()
-		dominosInMiddle.append(highest_domino)
-		domsThatTurn["op2"].append([highest_domino.left_value, highest_domino.right_value])
-
-func teammate_put_domino_in_middle(location):
-	var hand_node = get_node("../teammateHand")
-	if hand_node.player_hand.size() > 0:
-		var highest_domino = hand_node.player_hand[0]
-		for domino in hand_node.player_hand:
-			if domino.left_value + domino.right_value > highest_domino.left_value + highest_domino.right_value:
-				highest_domino = domino
-
-		hand_node.present_domino(highest_domino, location)
-		highest_domino.update_domino_display()
-		dominosInMiddle.append(highest_domino)
-		domsThatTurn["tm8"].append([highest_domino.left_value, highest_domino.right_value])
+		match player:
+			"op1":
+				domsThatTurn["op1"].append([highest_domino.left_value, highest_domino.right_value])
+			"op2":
+				domsThatTurn["op2"].append([highest_domino.left_value, highest_domino.right_value])
+			"tm8":
+				domsThatTurn["tm8"].append([highest_domino.left_value, highest_domino.right_value])
+			_:
+				print("Something terribly wrong has happen")
 
 func domino_accountant():
+	print(domsThatTurn)
 	var best_player = get_player_with_biggest_domino()
 	if best_player == "me" or best_player == "tm8":
 		myScore += 1
