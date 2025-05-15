@@ -13,18 +13,33 @@ var turn_counter = 0
 
 # Called when the node is added to the scene
 func _ready():
-	run_game()
 	$"../coin".play("default")
 
+func turn():
+	$"../Timer".start()
+	await $"../Timer".timeout
+	opponent1_put_domino_in_middle(FIRST_PLAYER)
+	$"../Timer".start()
+	await $"../Timer".timeout
+	teammate_put_domino_in_middle(SECOND_PLAYER)
+	$"../Timer".start()
+	await $"../Timer".timeout
+	opponent2_put_domino_in_middle(THIRD_PLAYER)
+	$"../Timer".start()
+	await $"../Timer".timeout
+	$"../dominoSlot".visible = true
+	$"../dominoSlot".position = FOURTH_PLAYER
+	$"../subDom".visible = true
+	turn_counter = 0
+
 func run_game():
+	$"../startGame".visible = false
 	myScore = 0
 	opponentScore = 0
 	hand_players_dominos()
-	opponent1_put_domino_in_middle(FIRST_PLAYER)
-	opponent2_put_domino_in_middle(SECOND_PLAYER)
-	teammate_put_domino_in_middle(THIRD_PLAYER)
-	$"../dominoSlot".position = FOURTH_PLAYER
-	turn_counter = 0
+	for i in range(7):
+		await turn()
+		await $"../subDom".pressed
 
 # Handles dealing dominos to the player's hand
 func hand_players_dominos():
@@ -59,6 +74,8 @@ func generate_all_dominos():
 
 # Called when the submit button is pressed
 func _on_sub_dom_pressed() -> void:
+	$"../subDom".visible = false
+	$"../dominoSlot".visible = false
 	var slot = get_node("../dominoSlot")
 	if slot.domino_in_slot:
 		teammate_turn()
@@ -76,10 +93,7 @@ func teammate_turn():
 		i.queue_free()
 		dominosInMiddle = []
 	
-	opponent1_put_domino_in_middle(FIRST_PLAYER)
-	opponent2_put_domino_in_middle(SECOND_PLAYER)
-	teammate_put_domino_in_middle(THIRD_PLAYER)
-	
+
 func opponent1_put_domino_in_middle(location):
 	var hand_node = get_node("../opponentHand1") 
 	if hand_node.player_hand.size() > 0:
@@ -127,3 +141,7 @@ func _on_domino_submitted(domino):
 func update_score():
 	$"../myScore".text = "Our Score: " + str(myScore)
 	$"../opponentScore".text = "Opponent Score: " + str(opponentScore)
+
+
+func _on_start_game_pressed() -> void:
+	run_game()

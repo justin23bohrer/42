@@ -134,6 +134,7 @@ position = Vector2(1, 0)
 script = ExtResource("1_emtyj")
 
 [node name="dominoSlot" parent="." instance=ExtResource("2_cy4qi")]
+visible = false
 position = Vector2(536, 360)
 rotation = 1.5708
 script = ExtResource("3_kpsxb")
@@ -151,6 +152,7 @@ script = ExtResource("6_xnnqk")
 script = ExtResource("7_mjw1d")
 
 [node name="subDom" type="Button" parent="."]
+visible = false
 anchors_preset = -1
 anchor_left = 0.132
 anchor_top = 0.617
@@ -188,4 +190,16 @@ scale = Vector2(3.1458, 3.5063)
 sprite_frames = SubResource("SpriteFrames_vuva4")
 speed_scale = 5.0
 
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+
+[node name="startGame" type="Button" parent="."]
+offset_left = 514.0
+offset_top = 295.0
+offset_right = 767.0
+offset_bottom = 366.0
+theme_override_font_sizes/font_size = 45
+text = "Start Game"
+
 [connection signal="pressed" from="subDom" to="gameManager" method="_on_sub_dom_pressed"]
+[connection signal="pressed" from="startGame" to="gameManager" method="_on_start_game_pressed"]
