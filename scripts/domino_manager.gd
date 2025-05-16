@@ -40,30 +40,55 @@ func _input(event):
 				finish_drag()
 
 func start_drag(domino):
-	if domino.is_locked:
-		return
+	# If domino is in slot, unlock and clear it from slot
+	if domino.in_slot:
+		var slot = get_node("../dominoSlot")
+		slot.domino_in_slot = false
+		slot.domino = null
+		slot.get_node("Area2D/CollisionShape2D").disabled = false
+		domino.in_slot = false
+		domino.is_locked = false
+
 	domino_being_dragged = domino
 	domino.scale = Vector2(1, 1)
 	domino.z_index = Z_INDEX_DRAGGED
 
+	highlight_domino(domino, false)
+	is_hovering_on_domino = false
+
 
 func finish_drag():
-	if domino_being_dragged:
-		domino_being_dragged.scale = Vector2(1.05, 1.05)
-		var domino_slot_found = raycast_check_for_domino_slot()
+	if not domino_being_dragged:
+		return
 
-		if domino_slot_found and not domino_slot_found.domino_in_slot:
-			player_hand_reference.remove_domino_from_hand(domino_being_dragged)
-			domino_being_dragged.position = domino_slot_found.position
-			domino_slot_found.get_node("Area2D/CollisionShape2D").disabled = true
-			domino_slot_found.domino_in_slot = true
-			domino_slot_found.domino = domino_being_dragged
-			domino_being_dragged.is_locked = true  
-		else:
-			# Domino dropped back in hand
-			player_hand_reference.add_domino_to_hand(domino_being_dragged)
-		
-		domino_being_dragged = null
+	domino_being_dragged.scale = Vector2(1.05, 1.05)
+	var domino_slot_found = raycast_check_for_domino_slot()
+
+	if domino_slot_found and not domino_slot_found.domino_in_slot:
+		# Dropping domino into empty slot
+		player_hand_reference.remove_domino_from_hand(domino_being_dragged)
+		domino_being_dragged.position = domino_slot_found.position
+		domino_slot_found.get_node("Area2D/CollisionShape2D").disabled = true
+		domino_slot_found.domino_in_slot = true
+		domino_slot_found.domino = domino_being_dragged
+		domino_being_dragged.is_locked = true
+		domino_being_dragged.in_slot = true
+	else:
+		# Dropping domino back into hand
+		if domino_being_dragged.in_slot:
+			# Clear the slot it was in
+			var slot = get_node("../dominoSlot")
+			slot.domino_in_slot = false
+			slot.domino = null
+			slot.get_node("Area2D/CollisionShape2D").disabled = false
+
+		domino_being_dragged.is_locked = false
+		domino_being_dragged.in_slot = false
+		player_hand_reference.add_domino_to_hand(domino_being_dragged)
+		player_hand_reference.update_hand_position()  # rearrange hand visually
+
+	domino_being_dragged.z_index = Z_INDEX_NORMAL
+	domino_being_dragged = null
 
 func connect_domino_signals(domino):
 	domino.connect("hovered", on_hovered_over_domino)
@@ -100,7 +125,8 @@ func raycast_check_for_domino():
 	var result = space_state.intersect_point(parameters)
 	if result.size() > 0:
 		var top_domino = get_domino_with_highest_z_index(result)
-		if top_domino and not top_domino.is_locked:
+		# Allow dragging locked dominos if they are in the slot
+		if top_domino and (not top_domino.is_locked or top_domino.in_slot):
 			return top_domino
 	return null
 	

@@ -5,6 +5,7 @@ signal hovered_off
 
 var is_locked = false
 var starting_position
+var in_slot = false
 
 var left_value: int = 0
 var right_value: int = 0
@@ -60,5 +61,32 @@ func _on_area_2d_mouse_entered() -> void:
 func _on_area_2d_mouse_exited() -> void:
 	emit_signal("hovered_off", self)
 	
-func multiple_of_five_animation():
-	pass
+func multiple_of_five_animation(num):
+	$normalDom.visible = false
+	$redDom.visible = true
+	if num == 5:
+		$five.visible = true
+	if num == 10:
+		$ten.visible = true
+	$Timer.start()
+	await $Timer.timeout
+	$normalDom.visible = true
+	$redDom.visible = false
+	$five.visible = false
+	$ten.visible = false
+
+func done_dom_animation():
+	$normalDom.visible = false
+	$doneDom.visible = true
+	$Timer.start()
+	await $Timer.timeout
+	$normalDom.visible = true
+	$doneDom.visible = false
+
+func winning_dom_animation():
+	$normalDom.visible = false
+	$winningDom.visible = true
+	$Timer.start()
+	await $Timer.timeout
+	$normalDom.visible = true
+	$winningDom.visible = false

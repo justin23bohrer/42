@@ -147,7 +147,7 @@ script = ExtResource("1_emtyj")
 
 [node name="dominoSlot" parent="." instance=ExtResource("2_cy4qi")]
 visible = false
-position = Vector2(526, 263)
+position = Vector2(740, 360)
 rotation = 1.5708
 script = ExtResource("3_kpsxb")
 
@@ -218,6 +218,21 @@ offset_right = 767.0
 offset_bottom = 366.0
 theme_override_font_sizes/font_size = 45
 text = "Start Game"
+
+[node name="runThroughDoms" type="Timer" parent="."]
+wait_time = 0.5
+
+[node name="plusOne" type="Label" parent="."]
+visible = false
+offset_left = 804.0
+offset_top = 339.0
+offset_right = 844.0
+offset_bottom = 362.0
+scale = Vector2(2, 2)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("9_gaopx")
+theme_override_font_sizes/font_size = 31
+text = "+1"
 
 [connection signal="pressed" from="subDom" to="gameManager" method="_on_sub_dom_pressed"]
 [connection signal="pressed" from="startGame" to="gameManager" method="_on_start_game_pressed"]

@@ -25,8 +25,9 @@ func receive_domino_values(domino_values: Array):
 func add_domino_to_hand(domino):
 	if domino in player_hand:
 		player_hand.erase(domino)
-
-	var insert_index = get_insert_index(domino.position.x)
+	
+	# Use domino position x and y to get insert index correctly for row
+	var insert_index = get_insert_index(domino.position.x, domino.position.y)
 	player_hand.insert(insert_index, domino)
 	update_hand_position()
 	
@@ -64,8 +65,20 @@ func remove_domino_from_hand(domino):
 		player_hand.erase(domino)
 		update_hand_position()
 
-func get_insert_index(x_pos: float) -> int:
-	for i in range(player_hand.size()):
-		if x_pos < player_hand[i].position.x:
+func get_insert_index(drop_x: float, drop_y: float) -> int:
+	if player_hand.size() == 0:
+		return 0
+	
+	var row = 0 if drop_y < HAND_Y_POSITION + 40 else 1
+	var start_index = 0 if row == 0 else 4
+	var end_index = 4 if row == 0 else player_hand.size()
+	
+	# Clamp start_index and end_index to valid range
+	start_index = clamp(start_index, 0, player_hand.size())
+	end_index = clamp(end_index, 0, player_hand.size())
+	
+	for i in range(start_index, end_index):
+		if drop_x < player_hand[i].position.x:
 			return i
-	return player_hand.size() 
+	
+	return end_index

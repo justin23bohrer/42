@@ -246,6 +246,29 @@ func get_player_position(player: String) -> Vector2:
 		_: return Vector2(0, 0)  # fallback
 
 func animate_dominos_to_winner() -> void:
+	for dom in dominosInMiddle:
+		if dom == get_winning_domino():
+			dom.winning_dom_animation()
+	$"../runThroughDoms".start()
+	await $"../runThroughDoms".timeout
+	for dom in dominosInMiddle:
+		dom.done_dom_animation()
+		$"../plusOne".visible = true
+	$"../runThroughDoms".start()
+	await $"../runThroughDoms".timeout
+	$"../plusOne".visible = false
+	for dom in dominosInMiddle:
+		var sum = dom.left_value + dom.right_value
+		$"../runThroughDoms".start()
+		await $"../runThroughDoms".timeout
+		# Only the winning domino gets the multiple_of_five_animation if divisible by 5
+		if sum % 5 == 0 and sum != 0:
+			dom.multiple_of_five_animation(sum)
+		
+	
+	$"../Timer".start()
+	await $"../Timer".timeout
+	
 	var target_pos = get_player_position(winning_player)
 
 	for dom in dominosInMiddle:
@@ -259,3 +282,10 @@ func animate_dominos_to_winner() -> void:
 	for dom in dominosInMiddle:
 		dom.queue_free()
 	dominosInMiddle = []
+
+func get_winning_domino() -> Node:
+	var winning_dom_values = domsThatTurn[winning_player][0]
+	for dom in dominosInMiddle:
+		if (dom.left_value == winning_dom_values[0] and dom.right_value == winning_dom_values[1]) or (dom.left_value == winning_dom_values[1] and dom.right_value == winning_dom_values[0]):
+			return dom
+	return null
