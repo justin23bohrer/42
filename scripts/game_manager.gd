@@ -50,7 +50,7 @@ func play_round():
 			"op2": [],
 			"me": []
 		}
-		leadingSuit = 0
+		leadingSuit = -1
 		rotate_players()
 		for y in player_rotation.size():
 			var player = player_rotation[y]
@@ -64,9 +64,7 @@ func play_round():
 		$"../Timer".start()
 		await $"../Timer".timeout
 	#clear doms
-		for j in dominosInMiddle:
-			j.queue_free()
-		dominosInMiddle = []
+		await animate_dominos_to_winner()
 		print(winning_player)
 
 func rotate_players():
@@ -170,7 +168,7 @@ func ai_plays_dom(player, location):
 		# No legal move, play lowest off-suit domino
 		chosen_domino = off_suit_dominos[0]
 		for dom in off_suit_dominos:
-			if (dom.left_value + dom.right_value) < (chosen_domino.left_value + chosen_domino.right_value):
+			if (dom.left_value + dom.right_value) < (chosen_domino.left_value + chosen_domino.right_value) and dom.left_value == dom.right_value and dom.left_value + dom.right_value != 5 and dom.left_value + dom.right_value != 10:
 				chosen_domino = dom
 
 	hand_node.present_domino(chosen_domino, location)
@@ -238,3 +236,26 @@ func _on_start_game_pressed() -> void:
 	opponentScore = 0
 	update_score()
 	run_game()
+
+func get_player_position(player: String) -> Vector2:
+	match player:
+		"me": return Vector2(45,-70)
+		"op1": return Vector2(-1264,-70)
+		"tm8": return Vector2(45,-70)
+		"op2": return Vector2(-1264,-70)
+		_: return Vector2(0, 0)  # fallback
+
+func animate_dominos_to_winner() -> void:
+	var target_pos = get_player_position(winning_player)
+
+	for dom in dominosInMiddle:
+		dom.z_index = 0
+		var tween = dom.create_tween()
+		tween.tween_property(dom, "position", target_pos, 0.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+		tween.tween_property(dom, "modulate:a", 0.0, 0.3).set_delay(0.5)
+
+	await get_tree().create_timer(1.0).timeout
+
+	for dom in dominosInMiddle:
+		dom.queue_free()
+	dominosInMiddle = []

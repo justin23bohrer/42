@@ -1,6 +1,7 @@
 extends Control
 
 signal start_pressed
+@onready var my_sprite = $"../background"  # or get_node("MySprite")
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.

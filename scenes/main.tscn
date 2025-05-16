@@ -23,10 +23,13 @@ scale = Vector2(0.438847, 0.384645)
 texture = ExtResource("2_35fhj")
 
 [node name="startScreen" parent="." instance=ExtResource("3_u4w22")]
+anchors_preset = -1
+anchor_right = 1.016
+anchor_bottom = 1.035
 offset_left = -6.0
 offset_top = 25.0
-offset_right = -6.0
-offset_bottom = 25.0
+offset_right = -26.48
+offset_bottom = -0.200073
 
 [node name="42game" parent="." instance=ExtResource("6_r6a0a")]
 visible = false

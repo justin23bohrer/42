@@ -135,7 +135,7 @@ script = ExtResource("1_emtyj")
 
 [node name="dominoSlot" parent="." instance=ExtResource("2_cy4qi")]
 visible = false
-position = Vector2(536, 360)
+position = Vector2(602, 314)
 rotation = 1.5708
 script = ExtResource("3_kpsxb")
 
