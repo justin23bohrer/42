@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://dhpm8c6ce6vb0"]
+[gd_scene load_steps=8 format=3 uid="uid://dhpm8c6ce6vb0"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_o8sy6"]
 [ext_resource type="Texture2D" uid="uid://cdhsdek7afjlj" path="res://assets/background/9285000.jpg" id="2_35fhj"]
 [ext_resource type="PackedScene" uid="uid://bd2jevu5imnto" path="res://scenes/startScreen.tscn" id="3_u4w22"]
+[ext_resource type="AudioStream" uid="uid://db6kwrhgtob0q" path="res://assets/music/Pix - Ocean Monsters.wav" id="4_d0r8g"]
 [ext_resource type="PackedScene" uid="uid://brx6e06tqnlpe" path="res://scenes/42_game.tscn" id="6_r6a0a"]
 [ext_resource type="AudioStream" uid="uid://cd4ju6fp6u55d" path="res://assets/music/bitSurf.wav" id="8_cxv0x"]
 [ext_resource type="PackedScene" uid="uid://dfpoqc88xspqk" path="res://scenes/screen_effect.tscn" id="9_6jgts"]
@@ -11,14 +12,19 @@
 script = ExtResource("1_o8sy6")
 
 [node name="screenEffect" parent="." instance=ExtResource("9_6jgts")]
+visible = false
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("8_cxv0x")
 volume_db = -17.445
 autoplay = true
 
+[node name="gameMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_d0r8g")
+volume_db = -6.024
+
 [node name="background" type="Sprite2D" parent="."]
-position = Vector2(640.73, 362.355)
+position = Vector2(641, 362)
 scale = Vector2(0.438847, 0.384645)
 texture = ExtResource("2_35fhj")
 

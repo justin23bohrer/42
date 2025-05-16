@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/start_screen.gd" id="1_ep3vi"]
 [ext_resource type="Texture2D" uid="uid://ctab3cvflkpm" path="res://assets/background/Untitled design (2) (1).png" id="2_frpeb"]
-[ext_resource type="FontFile" uid="uid://23bwyr0tfbnl" path="res://assets/font/docktrin.ttf" id="3_a5ix3"]
+[ext_resource type="FontFile" uid="uid://cxxfk50w5chw3" path="res://assets/font/Pixeboy-z8XGD.ttf" id="3_0hnhu"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_l31da"]
 
@@ -71,8 +71,8 @@ theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
 theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
 theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("3_a5ix3")
-theme_override_font_sizes/font_size = 36
+theme_override_fonts/font = ExtResource("3_0hnhu")
+theme_override_font_sizes/font_size = 45
 theme_override_styles/focus = SubResource("StyleBoxEmpty_l31da")
 theme_override_styles/hover = SubResource("StyleBoxFlat_f7e0s")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_vnxfr")
@@ -88,8 +88,8 @@ theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
 theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
 theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("3_a5ix3")
-theme_override_font_sizes/font_size = 36
+theme_override_fonts/font = ExtResource("3_0hnhu")
+theme_override_font_sizes/font_size = 45
 theme_override_styles/focus = SubResource("StyleBoxEmpty_l31da")
 theme_override_styles/hover = SubResource("StyleBoxFlat_f7e0s")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_vnxfr")
@@ -105,8 +105,8 @@ theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
 theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
 theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("3_a5ix3")
-theme_override_font_sizes/font_size = 36
+theme_override_fonts/font = ExtResource("3_0hnhu")
+theme_override_font_sizes/font_size = 45
 theme_override_styles/focus = SubResource("StyleBoxEmpty_l31da")
 theme_override_styles/hover = SubResource("StyleBoxFlat_f7e0s")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_vnxfr")

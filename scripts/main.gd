@@ -9,3 +9,5 @@ func _ready() -> void:
 func _on_start_game() -> void:
 	$startScreen.hide()
 	$"42game".visible = true
+	$gameMusic.play()
+	$AudioStreamPlayer.stop()

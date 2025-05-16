@@ -190,7 +190,6 @@ func domino_accountant():
 		myScore += points_this_round+1
 	if winning_player == "op1" or winning_player == "op2":
 		opponentScore += points_this_round+1
-	update_score()
 	
 func get_player_with_biggest_domino() -> String:
 	var best_player = ""
@@ -225,7 +224,7 @@ func present_final_score():
 		print("I win")
 	else:
 		print("you lost")
-
+	$"../startGame".visible = true
 func update_score():
 	$"../myScore".text = "Our Score: " + str(myScore)
 	$"../opponentScore".text = "Opponent Score: " + str(opponentScore)
@@ -246,6 +245,7 @@ func get_player_position(player: String) -> Vector2:
 		_: return Vector2(0, 0)  # fallback
 
 func animate_dominos_to_winner() -> void:
+	var tot_round_points = 1
 	for dom in dominosInMiddle:
 		if dom == get_winning_domino():
 			dom.winning_dom_animation()
@@ -259,12 +259,18 @@ func animate_dominos_to_winner() -> void:
 	$"../plusOne".visible = false
 	for dom in dominosInMiddle:
 		var sum = dom.left_value + dom.right_value
-		$"../runThroughDoms".start()
-		await $"../runThroughDoms".timeout
 		# Only the winning domino gets the multiple_of_five_animation if divisible by 5
 		if sum % 5 == 0 and sum != 0:
+			tot_round_points += sum
 			dom.multiple_of_five_animation(sum)
-		
+			$"../runThroughDoms".start()
+			await $"../runThroughDoms".timeout
+	if winning_player == "me" or winning_player == "tm8":
+		$"../myTeamPoints".text = "+"+str(tot_round_points)
+		$"../myTeamPoints".visible = true
+	else:
+		$"../opTeamPoints".text = "+"+str(tot_round_points)
+		$"../opTeamPoints".visible = true
 	
 	$"../Timer".start()
 	await $"../Timer".timeout
@@ -278,7 +284,9 @@ func animate_dominos_to_winner() -> void:
 		tween.tween_property(dom, "modulate:a", 0.0, 0.3).set_delay(0.5)
 
 	await get_tree().create_timer(1.0).timeout
-
+	$"../myTeamPoints".visible = false
+	$"../opTeamPoints".visible = false
+	update_score()
 	for dom in dominosInMiddle:
 		dom.queue_free()
 	dominosInMiddle = []

@@ -234,5 +234,29 @@ theme_override_fonts/font = ExtResource("9_gaopx")
 theme_override_font_sizes/font_size = 31
 text = "+1"
 
+[node name="myTeamPoints" type="Label" parent="."]
+visible = false
+offset_left = 253.0
+offset_top = 82.0
+offset_right = 293.0
+offset_bottom = 105.0
+scale = Vector2(2, 2)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("9_gaopx")
+theme_override_font_sizes/font_size = 31
+text = "+1"
+
+[node name="opTeamPoints" type="Label" parent="."]
+visible = false
+offset_left = 1159.0
+offset_top = 80.0
+offset_right = 1199.0
+offset_bottom = 103.0
+scale = Vector2(2, 2)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("9_gaopx")
+theme_override_font_sizes/font_size = 31
+text = "+1"
+
 [connection signal="pressed" from="subDom" to="gameManager" method="_on_sub_dom_pressed"]
 [connection signal="pressed" from="startGame" to="gameManager" method="_on_start_game_pressed"]
