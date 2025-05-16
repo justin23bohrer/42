@@ -23,11 +23,12 @@ func receive_domino_values(domino_values: Array):
 		new_domino.update_domino_display()
 
 func add_domino_to_hand(domino):
-	if domino not in player_hand:
-		player_hand.insert(0, domino)
-		update_hand_position()
-	else:
-		animate_domino_to_position(domino, domino.starting_position)
+	if domino in player_hand:
+		player_hand.erase(domino)
+
+	var insert_index = get_insert_index(domino.position.x)
+	player_hand.insert(insert_index, domino)
+	update_hand_position()
 	
 func update_hand_position():
 	center_screen_x = get_viewport().size.x / 2
@@ -62,3 +63,9 @@ func remove_domino_from_hand(domino):
 	if domino in player_hand:
 		player_hand.erase(domino)
 		update_hand_position()
+
+func get_insert_index(x_pos: float) -> int:
+	for i in range(player_hand.size()):
+		if x_pos < player_hand[i].position.x:
+			return i
+	return player_hand.size() 

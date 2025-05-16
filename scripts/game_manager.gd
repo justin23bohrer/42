@@ -240,16 +240,16 @@ func _on_start_game_pressed() -> void:
 func get_player_position(player: String) -> Vector2:
 	match player:
 		"me": return Vector2(45,-70)
-		"op1": return Vector2(-1264,-70)
+		"op1": return Vector2(1200, -70)
 		"tm8": return Vector2(45,-70)
-		"op2": return Vector2(-1264,-70)
+		"op2": return Vector2(1200, -70)
 		_: return Vector2(0, 0)  # fallback
 
 func animate_dominos_to_winner() -> void:
 	var target_pos = get_player_position(winning_player)
 
 	for dom in dominosInMiddle:
-		dom.z_index = 0
+		dom.z_index = -1
 		var tween = dom.create_tween()
 		tween.tween_property(dom, "position", target_pos, 0.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 		tween.tween_property(dom, "modulate:a", 0.0, 0.3).set_delay(0.5)

@@ -51,6 +51,7 @@ func finish_drag():
 	if domino_being_dragged:
 		domino_being_dragged.scale = Vector2(1.05, 1.05)
 		var domino_slot_found = raycast_check_for_domino_slot()
+
 		if domino_slot_found and not domino_slot_found.domino_in_slot:
 			player_hand_reference.remove_domino_from_hand(domino_being_dragged)
 			domino_being_dragged.position = domino_slot_found.position
@@ -59,7 +60,9 @@ func finish_drag():
 			domino_slot_found.domino = domino_being_dragged
 			domino_being_dragged.is_locked = true  
 		else:
+			# Domino dropped back in hand
 			player_hand_reference.add_domino_to_hand(domino_being_dragged)
+		
 		domino_being_dragged = null
 
 func connect_domino_signals(domino):
