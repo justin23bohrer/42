@@ -12,7 +12,6 @@
 script = ExtResource("1_o8sy6")
 
 [node name="screenEffect" parent="." instance=ExtResource("9_6jgts")]
-visible = false
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("8_cxv0x")

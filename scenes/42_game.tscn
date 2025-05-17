@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://brx6e06tqnlpe"]
+[gd_scene load_steps=29 format=3 uid="uid://brx6e06tqnlpe"]
 
 [ext_resource type="Script" path="res://scripts/domino_manager.gd" id="1_emtyj"]
 [ext_resource type="Texture2D" uid="uid://c7jtjwncnric2" path="res://assets/background/pixil-frame-0 (9).png" id="1_vvjxa"]
@@ -11,6 +11,7 @@
 [ext_resource type="Script" path="res://scripts/opponent_hand_2.gd" id="7_mjw1d"]
 [ext_resource type="FontFile" uid="uid://cxxfk50w5chw3" path="res://assets/font/Pixeboy-z8XGD.ttf" id="9_gaopx"]
 [ext_resource type="Texture2D" uid="uid://cy1qnxemur2r1" path="res://assets/coin/coin1_16x16.png" id="9_vcm17"]
+[ext_resource type="Texture2D" uid="uid://drvwc2y4mmsu6" path="res://assets/dominos/tree_bark_dominoes.png" id="12_xlbo7"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bycrx"]
 atlas = ExtResource("9_vcm17")
@@ -258,5 +259,140 @@ theme_override_fonts/font = ExtResource("9_gaopx")
 theme_override_font_sizes/font_size = 31
 text = "+1"
 
+[node name="trumpSelector" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="ColorRect" type="ColorRect" parent="trumpSelector"]
+offset_left = -24.0
+offset_top = -6.0
+offset_right = 1253.0
+offset_bottom = 713.0
+scale = Vector2(1.06696, 1.04576)
+color = Color(0, 0, 0, 0.780392)
+
+[node name="Label" type="Label" parent="trumpSelector/ColorRect"]
+layout_mode = 0
+offset_top = 138.0
+offset_right = 1279.0
+offset_bottom = 292.0
+theme_override_fonts/font = ExtResource("9_gaopx")
+theme_override_font_sizes/font_size = 75
+text = "Congrats you won the bid!
+
+Select the trump for the round"
+horizontal_alignment = 1
+
+[node name="blank" type="Sprite2D" parent="trumpSelector/ColorRect"]
+position = Vector2(340, 446)
+rotation = 1.5708
+scale = Vector2(10, 9.146)
+texture = ExtResource("12_xlbo7")
+region_enabled = true
+region_rect = Rect2(76, 18, 12, 12)
+
+[node name="one" type="Sprite2D" parent="trumpSelector/ColorRect"]
+position = Vector2(190, 446)
+rotation = 1.5708
+scale = Vector2(10, 9.146)
+texture = ExtResource("12_xlbo7")
+region_enabled = true
+region_rect = Rect2(44, 18, 12, 12)
+
+[node name="two" type="Sprite2D" parent="trumpSelector/ColorRect"]
+position = Vector2(490, 446)
+rotation = 1.5708
+scale = Vector2(10, 9.146)
+texture = ExtResource("12_xlbo7")
+region_enabled = true
+region_rect = Rect2(65, 18, 12, 12)
+
+[node name="three" type="Sprite2D" parent="trumpSelector/ColorRect"]
+position = Vector2(640, 446)
+rotation = 1.5708
+scale = Vector2(10, 9.146)
+texture = ExtResource("12_xlbo7")
+region_enabled = true
+region_rect = Rect2(140, 2, 12, 12)
+
+[node name="four" type="Sprite2D" parent="trumpSelector/ColorRect"]
+position = Vector2(790, 446)
+rotation = 1.5708
+scale = Vector2(10, 9.146)
+texture = ExtResource("12_xlbo7")
+region_enabled = true
+region_rect = Rect2(97, 50, 12, 12)
+
+[node name="five" type="Sprite2D" parent="trumpSelector/ColorRect"]
+position = Vector2(940, 446)
+rotation = 1.5708
+scale = Vector2(10, 9.146)
+texture = ExtResource("12_xlbo7")
+region_enabled = true
+region_rect = Rect2(204, 34, 12, 12)
+
+[node name="six" type="Sprite2D" parent="trumpSelector/ColorRect"]
+position = Vector2(1090, 446)
+rotation = 1.5708
+scale = Vector2(10, 9.146)
+texture = ExtResource("12_xlbo7")
+region_enabled = true
+region_rect = Rect2(161, 82, 12, 12)
+
+[node name="blankButton" type="Button" parent="trumpSelector/ColorRect"]
+show_behind_parent = true
+offset_left = 134.0
+offset_top = 387.0
+offset_right = 248.0
+offset_bottom = 510.0
+
+[node name="oneButton" type="Button" parent="trumpSelector/ColorRect"]
+show_behind_parent = true
+offset_left = 283.0
+offset_top = 387.0
+offset_right = 397.0
+offset_bottom = 510.0
+
+[node name="twoButton" type="Button" parent="trumpSelector/ColorRect"]
+show_behind_parent = true
+offset_left = 431.0
+offset_top = 387.0
+offset_right = 545.0
+offset_bottom = 510.0
+
+[node name="threebutton" type="Button" parent="trumpSelector/ColorRect"]
+show_behind_parent = true
+offset_left = 583.0
+offset_top = 387.0
+offset_right = 697.0
+offset_bottom = 510.0
+
+[node name="fourButton" type="Button" parent="trumpSelector/ColorRect"]
+show_behind_parent = true
+offset_left = 734.0
+offset_top = 387.0
+offset_right = 848.0
+offset_bottom = 510.0
+
+[node name="fiveButton" type="Button" parent="trumpSelector/ColorRect"]
+show_behind_parent = true
+offset_left = 884.0
+offset_top = 387.0
+offset_right = 998.0
+offset_bottom = 510.0
+
+[node name="sixButton" type="Button" parent="trumpSelector/ColorRect"]
+show_behind_parent = true
+offset_left = 1032.0
+offset_top = 387.0
+offset_right = 1146.0
+offset_bottom = 510.0
+
 [connection signal="pressed" from="subDom" to="gameManager" method="_on_sub_dom_pressed"]
 [connection signal="pressed" from="startGame" to="gameManager" method="_on_start_game_pressed"]
+[connection signal="pressed" from="trumpSelector/ColorRect/blankButton" to="gameManager" method="_on_blank_button_pressed"]
+[connection signal="pressed" from="trumpSelector/ColorRect/oneButton" to="gameManager" method="_on_one_button_pressed"]
+[connection signal="pressed" from="trumpSelector/ColorRect/twoButton" to="gameManager" method="_on_two_button_pressed"]
+[connection signal="pressed" from="trumpSelector/ColorRect/threebutton" to="gameManager" method="_on_threebutton_pressed"]
+[connection signal="pressed" from="trumpSelector/ColorRect/fourButton" to="gameManager" method="_on_four_button_pressed"]
+[connection signal="pressed" from="trumpSelector/ColorRect/fiveButton" to="gameManager" method="_on_five_button_pressed"]
+[connection signal="pressed" from="trumpSelector/ColorRect/sixButton" to="gameManager" method="_on_six_button_pressed"]

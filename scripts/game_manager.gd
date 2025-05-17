@@ -14,6 +14,7 @@ var dominosInMiddle = []
 var player_rotation = ["me","op1","tm8","op2"]
 var domsThatTurn = {}
 var winning_player = "me"
+var trump = -1
 
 # Called when the node is added to the scene
 func _ready():
@@ -43,6 +44,11 @@ func turn(turn, player):
 		$"../subDom".visible = true
 
 func play_round():
+	if winning_player == "me":
+		$"../trumpSelector".visible = true
+	else:
+		trump = 0
+		print("hit")
 	for i in range(7):
 		domsThatTurn = {
 			"op1": [],
@@ -297,3 +303,38 @@ func get_winning_domino() -> Node:
 		if (dom.left_value == winning_dom_values[0] and dom.right_value == winning_dom_values[1]) or (dom.left_value == winning_dom_values[1] and dom.right_value == winning_dom_values[0]):
 			return dom
 	return null
+
+
+func _on_blank_button_pressed() -> void:
+	trump = 0
+	$"../trumpSelector".visible = false
+
+
+func _on_one_button_pressed() -> void:
+	trump = 1
+	$"../trumpSelector".visible = false
+
+
+func _on_two_button_pressed() -> void:
+	trump = 2
+	$"../trumpSelector".visible = false
+
+
+func _on_threebutton_pressed() -> void:
+	trump = 3
+	$"../trumpSelector".visible = false
+
+
+func _on_four_button_pressed() -> void:
+	trump = 4
+	$"../trumpSelector".visible = false
+
+
+func _on_five_button_pressed() -> void:
+	trump = 5
+	$"../trumpSelector".visible = false
+
+
+func _on_six_button_pressed() -> void:
+	trump = 6
+	$"../trumpSelector".visible = false
