@@ -340,6 +340,7 @@ region_rect = Rect2(161, 82, 12, 12)
 
 [node name="blankButton" type="Button" parent="trumpSelector/ColorRect"]
 show_behind_parent = true
+layout_mode = 0
 offset_left = 134.0
 offset_top = 387.0
 offset_right = 248.0
@@ -347,6 +348,7 @@ offset_bottom = 510.0
 
 [node name="oneButton" type="Button" parent="trumpSelector/ColorRect"]
 show_behind_parent = true
+layout_mode = 0
 offset_left = 283.0
 offset_top = 387.0
 offset_right = 397.0
@@ -354,6 +356,7 @@ offset_bottom = 510.0
 
 [node name="twoButton" type="Button" parent="trumpSelector/ColorRect"]
 show_behind_parent = true
+layout_mode = 0
 offset_left = 431.0
 offset_top = 387.0
 offset_right = 545.0
@@ -361,6 +364,7 @@ offset_bottom = 510.0
 
 [node name="threebutton" type="Button" parent="trumpSelector/ColorRect"]
 show_behind_parent = true
+layout_mode = 0
 offset_left = 583.0
 offset_top = 387.0
 offset_right = 697.0
@@ -368,6 +372,7 @@ offset_bottom = 510.0
 
 [node name="fourButton" type="Button" parent="trumpSelector/ColorRect"]
 show_behind_parent = true
+layout_mode = 0
 offset_left = 734.0
 offset_top = 387.0
 offset_right = 848.0
@@ -375,6 +380,7 @@ offset_bottom = 510.0
 
 [node name="fiveButton" type="Button" parent="trumpSelector/ColorRect"]
 show_behind_parent = true
+layout_mode = 0
 offset_left = 884.0
 offset_top = 387.0
 offset_right = 998.0
@@ -382,6 +388,7 @@ offset_bottom = 510.0
 
 [node name="sixButton" type="Button" parent="trumpSelector/ColorRect"]
 show_behind_parent = true
+layout_mode = 0
 offset_left = 1032.0
 offset_top = 387.0
 offset_right = 1146.0

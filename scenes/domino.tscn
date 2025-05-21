@@ -1,8 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://c8kjicutsl3ql"]
+[gd_scene load_steps=8 format=3 uid="uid://c8kjicutsl3ql"]
 
 [ext_resource type="Script" path="res://scripts/domino.gd" id="1_7bbmw"]
 [ext_resource type="Texture2D" uid="uid://b37gpd3xe8ige" path="res://assets/dominos/blanks.png" id="1_45hy6"]
 [ext_resource type="FontFile" uid="uid://cxxfk50w5chw3" path="res://assets/font/Pixeboy-z8XGD.ttf" id="3_ngiuv"]
+[ext_resource type="AudioStream" uid="uid://c41b0xxvx4i6w" path="res://assets/music/8-bit-game-sfx-sound-21-269970.mp3" id="4_1pli1"]
+[ext_resource type="AudioStream" uid="uid://besd3nflbk2fg" path="res://assets/music/experimental-8-bit-sound-270302.mp3" id="5_ey6sp"]
+[ext_resource type="AudioStream" uid="uid://1fddr8b3f6fr" path="res://assets/music/gameboy-pluck-41265.mp3" id="6_lysfw"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_uwevp"]
 size = Vector2(103, 49)
@@ -86,6 +89,15 @@ theme_override_colors/font_color = Color(1, 0, 0, 1)
 theme_override_fonts/font = ExtResource("3_ngiuv")
 theme_override_font_sizes/font_size = 31
 text = "+10"
+
+[node name="redDomSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_1pli1")
+
+[node name="winningDomSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_ey6sp")
+
+[node name="doneDomSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_lysfw")
 
 [connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]
 [connection signal="mouse_exited" from="Area2D" to="." method="_on_area_2d_mouse_exited"]

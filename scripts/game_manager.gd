@@ -13,7 +13,7 @@ var opponentScore = 0
 var dominosInMiddle = []
 var player_rotation = ["me","op1","tm8","op2"]
 var domsThatTurn = {}
-var winning_player = "me"
+var winning_player = "tm8"
 var trump = -1
 
 # Called when the node is added to the scene
@@ -46,9 +46,12 @@ func turn(turn, player):
 func play_round():
 	if winning_player == "me":
 		$"../trumpSelector".visible = true
-	else:
-		trump = 0
 		print("hit")
+	else:
+		print("hit")
+		# Let AI pick highest count or highest double
+		trump = pick_ai_trump(get_node("../teammateHand" if winning_player == "tm8" else "../opponentHand1" if winning_player == "op1" else "../opponentHand2"))
+		print("AI picked trump:", trump)
 	for i in range(7):
 		domsThatTurn = {
 			"op1": [],
@@ -163,7 +166,7 @@ func ai_plays_dom(player, location):
 
 	var chosen_domino
 	if legal_dominos.size() > 0:
-		# Prioritize doubles first, then highest sum
+		# Play legal domino
 		chosen_domino = legal_dominos[0]
 		for dom in legal_dominos:
 			if dom.left_value == dom.right_value and chosen_domino.left_value != chosen_domino.right_value:
@@ -171,11 +174,24 @@ func ai_plays_dom(player, location):
 			elif (dom.left_value + dom.right_value) > (chosen_domino.left_value + chosen_domino.right_value):
 				chosen_domino = dom
 	else:
-		# No legal move, play lowest off-suit domino
-		chosen_domino = off_suit_dominos[0]
+		# No lead-suit domino, prefer trump domino
+		var trump_dominos = []
 		for dom in off_suit_dominos:
-			if (dom.left_value + dom.right_value) < (chosen_domino.left_value + chosen_domino.right_value) and dom.left_value == dom.right_value and dom.left_value + dom.right_value != 5 and dom.left_value + dom.right_value != 10:
-				chosen_domino = dom
+			if dom.left_value == trump or dom.right_value == trump:
+				trump_dominos.append(dom)
+		if trump_dominos.size() > 0:
+			chosen_domino = trump_dominos[0]
+			for dom in trump_dominos:
+				if dom.left_value == dom.right_value and chosen_domino.left_value != chosen_domino.right_value:
+					chosen_domino = dom
+				elif (dom.left_value + dom.right_value) > (chosen_domino.left_value + chosen_domino.right_value):
+					chosen_domino = dom
+		else:
+			# Fallback: lowest value domino
+			chosen_domino = off_suit_dominos[0]
+			for dom in off_suit_dominos:
+				if (dom.left_value + dom.right_value) < (chosen_domino.left_value + chosen_domino.right_value):
+					chosen_domino = dom
 
 	hand_node.present_domino(chosen_domino, location)
 	chosen_domino.update_domino_display()
@@ -205,19 +221,25 @@ func get_player_with_biggest_domino() -> String:
 	for player in domsThatTurn.keys():
 		var dom = domsThatTurn[player][0]
 		var is_double = dom[0] == dom[1]
-		var follows_suit = dom[0] == leadingSuit or dom[1] == leadingSuit
+		var follows_lead = dom[0] == leadingSuit or dom[1] == leadingSuit
+		var follows_trump = dom[0] == trump or dom[1] == trump
 		var dom_score = dom[0] + dom[1]
 
-		# Priority: double-in-suit > in-suit > double > off-suit
 		var priority = 0
-		if is_double and follows_suit:
+		# Highest priority: double trump > trump > double lead > lead > double > off-suit
+		if is_double and follows_trump:
+			priority = 5
+		elif follows_trump:
+			priority = 4
+		elif is_double and follows_lead:
 			priority = 3
-		elif follows_suit:
+		elif follows_lead:
 			priority = 2
 		elif is_double:
 			priority = 1
+		else:
+			priority = 0
 
-		# Pick higher priority, or higher sum within tie
 		if priority > best_priority or (priority == best_priority and dom_score > best_score):
 			best_priority = priority
 			best_score = dom_score
@@ -303,6 +325,13 @@ func get_winning_domino() -> Node:
 		if (dom.left_value == winning_dom_values[0] and dom.right_value == winning_dom_values[1]) or (dom.left_value == winning_dom_values[1] and dom.right_value == winning_dom_values[0]):
 			return dom
 	return null
+
+func pick_ai_trump(hand_node):
+	var count = [0, 0, 0, 0, 0, 0, 0]
+	for dom in hand_node.player_hand:
+		count[dom.left_value] += 1
+		count[dom.right_value] += 1
+	return count.find(count.max())
 
 
 func _on_blank_button_pressed() -> void:

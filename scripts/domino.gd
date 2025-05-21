@@ -68,6 +68,7 @@ func multiple_of_five_animation(num):
 		$five.visible = true
 	if num == 10:
 		$ten.visible = true
+	$redDomSound.play()
 	$Timer.start()
 	await $Timer.timeout
 	$normalDom.visible = true
@@ -78,6 +79,7 @@ func multiple_of_five_animation(num):
 func done_dom_animation():
 	$normalDom.visible = false
 	$doneDom.visible = true
+	$doneDomSound.play()
 	$Timer.start()
 	await $Timer.timeout
 	$normalDom.visible = true
@@ -86,6 +88,7 @@ func done_dom_animation():
 func winning_dom_animation():
 	$normalDom.visible = false
 	$winningDom.visible = true
+	$doneDomSound.play()
 	$Timer.start()
 	await $Timer.timeout
 	$normalDom.visible = true
