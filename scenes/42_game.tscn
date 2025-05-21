@@ -128,6 +128,11 @@ animations = [{
 
 [node name="42game" type="Node2D"]
 
+[node name="trumpBorder" type="Sprite2D" parent="."]
+position = Vector2(109, 676)
+scale = Vector2(6.56828, -6.43746)
+texture = ExtResource("1_vvjxa")
+
 [node name="Pixil-frame-0(9)" type="Sprite2D" parent="."]
 position = Vector2(197.75, 42)
 scale = Vector2(11.5469, 5.625)
@@ -189,6 +194,15 @@ offset_bottom = 111.0
 theme_override_fonts/font = ExtResource("9_gaopx")
 theme_override_font_sizes/font_size = 47
 text = "Our Score: 0"
+
+[node name="trumpLabel" type="Label" parent="."]
+offset_left = 34.0
+offset_top = 662.0
+offset_right = 358.0
+offset_bottom = 745.0
+theme_override_fonts/font = ExtResource("9_gaopx")
+theme_override_font_sizes/font_size = 47
+text = "Trump: 0"
 
 [node name="opponentScore" type="Label" parent="."]
 offset_left = 934.0

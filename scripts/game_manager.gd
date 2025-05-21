@@ -18,6 +18,7 @@ var trump = -1
 
 # Called when the node is added to the scene
 func _ready():
+	$"../trumpLabel".text = "Trump: "
 	$"../coin".play("default")
 
 func turn(turn, player):
@@ -46,12 +47,13 @@ func turn(turn, player):
 func play_round():
 	if winning_player == "me":
 		$"../trumpSelector".visible = true
-		print("hit")
 	else:
-		print("hit")
+		$"../Timer".start()
+		await $"../Timer".timeout
 		# Let AI pick highest count or highest double
 		trump = pick_ai_trump(get_node("../teammateHand" if winning_player == "tm8" else "../opponentHand1" if winning_player == "op1" else "../opponentHand2"))
 		print("AI picked trump:", trump)
+	$"../trumpLabel".text = "Trump: " + str(trump)
 	for i in range(7):
 		domsThatTurn = {
 			"op1": [],
@@ -94,6 +96,7 @@ func run_game():
 	$"../startGame".visible = false
 	hand_players_dominos()
 	await play_round()
+	$"../trumpLabel".text = "Trump: "
 	present_final_score()
 
 # Handles dealing dominos to the player's hand
