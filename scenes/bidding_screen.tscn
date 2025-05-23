@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bao8a625celm"]
 
-[ext_resource type="Script" path="res://bidding_screen.gd" id="1_gtj8t"]
+[ext_resource type="Script" path="res://scripts/bidding_screen.gd" id="1_gtj8t"]
 [ext_resource type="FontFile" uid="uid://cxxfk50w5chw3" path="res://assets/font/Pixeboy-z8XGD.ttf" id="2_otu6t"]
 
 [node name="biddingScreen" type="Control"]
