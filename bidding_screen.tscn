@@ -1,0 +1,88 @@
+[gd_scene load_steps=3 format=3 uid="uid://bao8a625celm"]
+
+[ext_resource type="Script" path="res://bidding_screen.gd" id="1_gtj8t"]
+[ext_resource type="FontFile" uid="uid://cxxfk50w5chw3" path="res://assets/font/Pixeboy-z8XGD.ttf" id="2_otu6t"]
+
+[node name="biddingScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_gtj8t")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_left = -24.0
+offset_top = -6.0
+offset_right = 1253.0
+offset_bottom = 713.0
+scale = Vector2(1.06696, 1.04576)
+color = Color(0, 0, 0, 0.780392)
+
+[node name="Label" type="Label" parent="ColorRect"]
+layout_mode = 0
+offset_top = 138.0
+offset_right = 1279.0
+offset_bottom = 292.0
+theme_override_fonts/font = ExtResource("2_otu6t")
+theme_override_font_sizes/font_size = 75
+text = "Whats your bid?"
+horizontal_alignment = 1
+
+[node name="right" type="Button" parent="ColorRect"]
+layout_mode = 0
+offset_left = 709.492
+offset_top = 297.391
+offset_right = 771.492
+offset_bottom = 350.391
+theme_override_fonts/font = ExtResource("2_otu6t")
+theme_override_font_sizes/font_size = 60
+text = ">"
+
+[node name="left" type="Button" parent="ColorRect"]
+layout_mode = 0
+offset_left = 501.425
+offset_top = 296.435
+offset_right = 563.425
+offset_bottom = 349.435
+theme_override_fonts/font = ExtResource("2_otu6t")
+theme_override_font_sizes/font_size = 60
+text = "<"
+
+[node name="bidNum" type="Label" parent="ColorRect"]
+layout_mode = 0
+offset_left = 602.647
+offset_top = 283.048
+offset_right = 672.647
+offset_bottom = 366.048
+theme_override_fonts/font = ExtResource("2_otu6t")
+theme_override_font_sizes/font_size = 75
+text = "30"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="subBid" type="Button" parent="ColorRect"]
+layout_mode = 0
+offset_left = 537.04
+offset_top = 393.972
+offset_right = 747.04
+offset_bottom = 476.972
+theme_override_fonts/font = ExtResource("2_otu6t")
+theme_override_font_sizes/font_size = 40
+text = "Submit bid"
+
+[node name="pass" type="Button" parent="ColorRect"]
+layout_mode = 0
+offset_left = 563.283
+offset_top = 501.071
+offset_right = 720.283
+offset_bottom = 564.071
+theme_override_fonts/font = ExtResource("2_otu6t")
+theme_override_font_sizes/font_size = 40
+text = "Pass"
+
+[connection signal="pressed" from="ColorRect/right" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="ColorRect/left" to="." method="_on_button_2_pressed"]
+[connection signal="pressed" from="ColorRect/subBid" to="." method="_on_sub_bid_pressed"]
+[connection signal="pressed" from="ColorRect/pass" to="." method="_on_pass_pressed"]
