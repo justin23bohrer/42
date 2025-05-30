@@ -1,15 +1,17 @@
 extends Control
 
 var bidNum
+var curBid
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	bidNum = 30
+	curBid = 30
+	bidNum = curBid
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	$ColorRect/bidNum.text = str(bidNum)
-	if bidNum == 30:
+	if bidNum == curBid:
 		$ColorRect/left.visible = false
 	else:
 		$ColorRect/left.visible = true

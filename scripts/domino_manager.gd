@@ -40,6 +40,8 @@ func _input(event):
 				finish_drag()
 
 func start_drag(domino):
+	if not player_hand_reference.player_hand.has(domino):
+		return
 	# If domino is in slot, unlock and clear it from slot
 	if domino.in_slot:
 		var slot = get_node("../dominoSlot")

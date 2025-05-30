@@ -9,11 +9,19 @@ var in_slot = false
 
 var left_value: int = 0
 var right_value: int = 0
+var select_dealer_position
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	#Must have parent 
-	get_parent().connect_domino_signals(self)
+	# Only connect signals if parent has the method (i.e., for hand dominos)
+	if get_parent().has_method("connect_domino_signals"):
+		get_parent().connect_domino_signals(self)
+
+func show_face_down():
+	$left.texture = ResourceLoader.load("res://assets/dominos/dominoNumbers/0.png")
+	$right.texture = ResourceLoader.load("res://assets/dominos/dominoNumbers/0.png")
+	$Area2D.monitoring = true
+	$Area2D.get_node("CollisionShape2D").disabled = false
 
 func update_domino_display():
 	match left_value:

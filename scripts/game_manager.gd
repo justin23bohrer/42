@@ -1,6 +1,7 @@
 extends Node
 
 signal domino_submitted
+signal dealer_domino_selected(selected_domino)
 
 const FIRST_PLAYER = Vector2(536, 360)
 const SECOND_PLAYER = Vector2(604, 360)
@@ -15,6 +16,7 @@ var player_rotation = ["me","op1","tm8","op2"]
 var domsThatTurn = {}
 var winning_player = "tm8"
 var trump = -1
+var base = ["me","op1","tm8","op2"]
 
 # Called when the node is added to the scene
 func _ready():
@@ -45,15 +47,7 @@ func turn(turn, player):
 		$"../subDom".visible = true
 
 func play_round():
-	if winning_player == "me":
-		$"../trumpSelector".visible = true
-	else:
-		$"../Timer".start()
-		await $"../Timer".timeout
-		# Let AI pick highest count or highest double
-		trump = pick_ai_trump(get_node("../teammateHand" if winning_player == "tm8" else "../opponentHand1" if winning_player == "op1" else "../opponentHand2"))
-		print("AI picked trump:", trump)
-	$"../trumpLabel".text = "Trump: " + str(trump)
+	select_trump()
 	for i in range(7):
 		domsThatTurn = {
 			"op1": [],
@@ -78,6 +72,18 @@ func play_round():
 		await animate_dominos_to_winner()
 		print(winning_player)
 
+func select_trump():
+	if winning_player == "me":
+		$"../trumpSelector".visible = true
+		$"../trumpLabel".text = "Trump: " + str(trump)
+	else:
+		$"../Timer".start()
+		await $"../Timer".timeout
+		# Let AI pick highest count or highest double
+		trump = pick_ai_trump(get_node("../teammateHand" if winning_player == "tm8" else "../opponentHand1" if winning_player == "op1" else "../opponentHand2"))
+		print("AI picked trump:", trump)
+	$"../trumpLabel".text = "Trump: " + str(trump)
+	
 func rotate_players():
 	var index = player_rotation.find(winning_player)
 	if index == -1:
@@ -92,8 +98,95 @@ func rotate_players():
 	player_rotation = new_rotation
 	print(player_rotation)
 
+func select_dealer():
+	var all_dominos = generate_all_dominos()
+	all_dominos.shuffle()
+	var viewport_size = get_viewport().size
+	var center_x = viewport_size.x / 2
+	var center_y = viewport_size.y / 2
+	var spacing = 100
+
+	var center_positions = []
+	for i in range(4):
+		center_positions.append(Vector2(center_x + (i - 1.5) * spacing, center_y))
+		
+	var selected_domino = null
+	var selected_index = -1
+	
+	var domino_manager = get_node("../dominoManager")
+
+	# Spawn 4 face-down dominos
+	for i in range(4):
+		var values = all_dominos.pop_front()
+		var dom = preload("res://scenes/domino.tscn").instantiate()
+		dom.left_value = values[0]
+		dom.right_value = values[1]
+		dom.select_dealer_position = i
+		dom.position = center_positions[i]
+		dom.rotation = 1.5708
+		domino_manager.add_child(dom)
+		dominosInMiddle.append(dom)
+		dom.show_face_down()
+		print(dom)
+		print(dom.right_value)
+		print(dom.left_value)
+		
+		# Make them clickable
+		dom.get_node("Area2D").connect("input_event", Callable(self, "_on_dealer_domino_clicked").bind(dom, i))
+	# Wait for one to be picked
+	selected_domino = await self.dealer_domino_selected
+	print(selected_domino)
+
+	selected_domino.update_domino_display()
+	await get_tree().create_timer(1.0).timeout
+	
+	var select_dealer_places = []
+	for i in range(base.size()):
+		select_dealer_places.append(base[(i - selected_domino.select_dealer_position) % base.size()])
+	print(select_dealer_places)
+	
+	for dom in dominosInMiddle:
+		dom.update_domino_display()
+
+	# Set dealer
+	var max_sum = -1
+	var dealer_index = -1
+
+	for i in range(dominosInMiddle.size()):
+		var dom = dominosInMiddle[i]
+		var dom_sum = dom.left_value + dom.right_value
+		if dom_sum > max_sum:
+			max_sum = dom_sum
+			dealer_index = i
+
+# Assign the dealer based on the index of the domino with the highest sum
+	var base_places = ["me", "op1", "tm8", "op2"]
+	winning_player = select_dealer_places[dealer_index]
+	print("Dealer is:", winning_player)
+
+	var winning_domino = dominosInMiddle[dealer_index]
+	await get_tree().create_timer(3.0).timeout
+	await winning_domino.winning_dom_animation()
+	await get_tree().create_timer(2.0).timeout
+
+	# Clean up others
+	for dom in dominosInMiddle:
+		dom.queue_free()
+	dominosInMiddle.clear()
+	print(winning_player)
+
+func _on_dealer_domino_clicked(viewport, event, shape_idx, dom, index):
+	if event is InputEventMouseButton and event.pressed:
+		print("Dealer domino clicked:", dom)
+		emit_signal("dealer_domino_selected", dom)
+
 func run_game():
 	$"../startGame".visible = false
+	#inital dom flop to decide dealer
+	await select_dealer()
+	#dealer shakes then hands dominos out
+	#left of dealer starts bid phase
+	#bid winner starts
 	hand_players_dominos()
 	await play_round()
 	$"../trumpLabel".text = "Trump: "
