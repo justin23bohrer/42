@@ -21,7 +21,70 @@ var base = ["me","op1","tm8","op2"]
 # Called when the node is added to the scene
 func _ready():
 	$"../trumpLabel".text = "Trump: "
-	$"../coin".play("default")
+
+func run_game():
+	$"../startGame".visible = false
+	#inital dom flop to decide dealer
+	await select_dealer()
+	#dealer shakes then hands dominos out
+	await animate_deal_dominos(winning_player)
+	#left of dealer starts bid phase
+	await bidding()
+	#bid winner starts
+	await play_round()
+	$"../trumpLabel".text = "Trump: "
+	present_final_score()
+
+func bidding():
+	var highest_bid = 30
+	var highest_bidder = ""
+	var passes = 0
+	var bid_order = []
+	
+	# Start left of dealer
+	var dealer_index = player_rotation.find(winning_player)
+	for i in range(1, 5):
+		bid_order.append(player_rotation[(dealer_index + i) % 4])
+	print(bid_order)
+	print(winning_player)
+
+	var bids = {}
+
+	for player in bid_order:
+		if player == "me":
+			# Show bidding UI for player
+			var bid_screen = get_node("../biddingScreen")
+			bid_screen.visible = true
+			bid_screen.curBid = highest_bid + 1
+			bid_screen.bidNum = bid_screen.curBid
+			var result = await bid_screen.wait_for_bid()
+			bid_screen.visible = false
+			if result != -1:
+				var bid = int(result)
+				if bid > highest_bid:
+					highest_bid = bid
+					highest_bidder = player
+		else:
+			var ai_bid = ai_make_bid(player, highest_bid)
+			if ai_bid != "pass":
+				var bid = int(ai_bid)
+				if bid > highest_bid:
+					highest_bid = bid
+					highest_bidder = player
+		print("Bid winner:", highest_bidder, "with", highest_bid)
+	# If only one left, break
+	if highest_bidder == "":
+		highest_bidder = bid_order[-1]
+		highest_bid = 30
+	winning_player = highest_bidder
+	print("Bid winner:", winning_player, "with", highest_bid)
+
+func ai_make_bid(player, current_highest_bid):
+	# Simple AI: random pass or +1 bid
+	if randi() % 2 == 0 or current_highest_bid >= 42:
+		return "pass"
+	print("passing")
+	return str(current_highest_bid + 1)
 
 func turn(turn, player):
 	print(player)
@@ -104,18 +167,18 @@ func select_dealer():
 	var viewport_size = get_viewport().size
 	var center_x = viewport_size.x / 2
 	var center_y = viewport_size.y / 2
-	var spacing = 100
+	var spacing = 170
 
 	var center_positions = []
 	for i in range(4):
 		center_positions.append(Vector2(center_x + (i - 1.5) * spacing, center_y))
+		print(Vector2(center_x + (i - 1.5) * spacing, center_y))
 		
 	var selected_domino = null
 	var selected_index = -1
 	
 	var domino_manager = get_node("../dominoManager")
-
-	# Spawn 4 face-down dominos
+	$"../select_dealer/Label".visible = true
 	for i in range(4):
 		var values = all_dominos.pop_front()
 		var dom = preload("res://scenes/domino.tscn").instantiate()
@@ -127,13 +190,9 @@ func select_dealer():
 		domino_manager.add_child(dom)
 		dominosInMiddle.append(dom)
 		dom.show_face_down()
-		print(dom)
-		print(dom.right_value)
-		print(dom.left_value)
 		
-		# Make them clickable
 		dom.get_node("Area2D").connect("input_event", Callable(self, "_on_dealer_domino_clicked").bind(dom, i))
-	# Wait for one to be picked
+
 	selected_domino = await self.dealer_domino_selected
 	print(selected_domino)
 
@@ -143,12 +202,44 @@ func select_dealer():
 	var select_dealer_places = []
 	for i in range(base.size()):
 		select_dealer_places.append(base[(i - selected_domino.select_dealer_position) % base.size()])
-	print(select_dealer_places)
 	
-	for dom in dominosInMiddle:
-		dom.update_domino_display()
+	var spot_nodes = {
+		0: $"../select_dealer/firstSpot",
+		1: $"../select_dealer/secondSpot",
+		2: $"../select_dealer/thirdSpot",
+		3: $"../select_dealer/fourthSpot",
+	}
 
-	# Set dealer
+	for i in range(4):
+		var spot = spot_nodes[i]
+		var label_names = {
+			"me": "Me",
+			"tm8": "Teammate",
+			"op1": "Opponent 1",
+			"op2": "Opponent 2"
+		}
+
+		if spot.has_node("Label"):
+			var role = select_dealer_places[i]
+			spot.get_node("Label").text = label_names.get(role, role)
+		spot.visible = false
+
+	var me_index = select_dealer_places.find("me")
+	$"../select_dealer/Label".visible = false
+	# Show only "me" first
+	for i in range(4):
+		spot_nodes[i].visible = (i == me_index)
+
+	await get_tree().create_timer(2.0).timeout
+
+	for i in range(4):
+		if i == me_index:
+			continue
+
+		spot_nodes[i].visible = true
+		dominosInMiddle[i].update_domino_display()
+		await get_tree().create_timer(1.5).timeout
+
 	var max_sum = -1
 	var dealer_index = -1
 
@@ -159,13 +250,11 @@ func select_dealer():
 			max_sum = dom_sum
 			dealer_index = i
 
-# Assign the dealer based on the index of the domino with the highest sum
 	var base_places = ["me", "op1", "tm8", "op2"]
 	winning_player = select_dealer_places[dealer_index]
 	print("Dealer is:", winning_player)
 
 	var winning_domino = dominosInMiddle[dealer_index]
-	await get_tree().create_timer(3.0).timeout
 	await winning_domino.winning_dom_animation()
 	await get_tree().create_timer(2.0).timeout
 
@@ -174,48 +263,71 @@ func select_dealer():
 		dom.queue_free()
 	dominosInMiddle.clear()
 	print(winning_player)
+	for spot in spot_nodes.values():
+		spot.visible = false
 
 func _on_dealer_domino_clicked(viewport, event, shape_idx, dom, index):
 	if event is InputEventMouseButton and event.pressed:
 		print("Dealer domino clicked:", dom)
 		emit_signal("dealer_domino_selected", dom)
+# Add this function to animate dealing dominos
+func animate_deal_dominos(dealer_player):
+	var hand_nodes = {
+		"me": get_node("../playerHand"),
+		"tm8": get_node("../teammateHand"),
+		"op1": get_node("../opponentHand1"),
+		"op2": get_node("../opponentHand2"),
+	}
+	var hand_positions = {
+		"me": Vector2(get_viewport().size.x / 2, 550), # bottom middle
+		"tm8": Vector2(get_viewport().size.x / 2, 100), # top middle
+		"op1": Vector2(120, get_viewport().size.y / 2), # left middle
+		"op2": Vector2(get_viewport().size.x - 120, get_viewport().size.y / 2), # right middle
+	}
+	var dealer_pos = hand_positions[dealer_player]
 
-func run_game():
-	$"../startGame".visible = false
-	#inital dom flop to decide dealer
-	await select_dealer()
-	#dealer shakes then hands dominos out
-	#left of dealer starts bid phase
-	#bid winner starts
-	hand_players_dominos()
-	await play_round()
-	$"../trumpLabel".text = "Trump: "
-	present_final_score()
-
-# Handles dealing dominos to the player's hand
-func hand_players_dominos():
+	# Prepare dominos for each hand
 	var all_dominos = generate_all_dominos()
 	all_dominos.shuffle()
+	var hands = {
+		"me": all_dominos.slice(0, 7),
+		"tm8": all_dominos.slice(7, 14),
+		"op1": all_dominos.slice(14, 21),
+		"op2": all_dominos.slice(21, 28),
+	}
 
-	var player_hand_values = all_dominos.slice(0, 7)
-	var teammate_hand_values = all_dominos.slice(7, 14) 
-	var opponent_hand1_values = all_dominos.slice(14, 21)
-	var opponent_hand2_values = all_dominos.slice(21, 28)
-	 
-	#hand me dominos
-	var player_hand = get_node("../playerHand")
-	player_hand.receive_domino_values(player_hand_values)
-	#hand teammate dominos
-	var teammate_hand = get_node("../teammateHand")
-	teammate_hand.receive_domino_values(teammate_hand_values)
-	#hand opponent1 dominos
-	var opponent_hand1 = get_node("../opponentHand1")
-	opponent_hand1.receive_domino_values(opponent_hand1_values)
-	#hand opponent2 dominos
-	var opponent_hand2 = get_node("../opponentHand2")
-	opponent_hand2.receive_domino_values(opponent_hand2_values)
+	# Clear hands before dealing
+	for player in hand_nodes.keys():
+		hand_nodes[player].player_hand.clear()
 
-# Generates a standard set of 28 dominos
+	# Animate dealing one domino at a time to each player
+	for i in range(7):
+		for player in ["me", "tm8", "op1", "op2"]:
+			var pair = hands[player][i]
+			var dom = preload("res://scenes/domino.tscn").instantiate()
+			dom.left_value = pair[0]
+			dom.right_value = pair[1]
+			dom.position = dealer_pos
+			dom.z_index = 1000
+			get_node("../dominoManager").add_child(dom)
+
+			# Animate to hand position (could be improved for hand layout)
+			var target_pos = hand_positions[player]
+			var tween = dom.create_tween()
+			tween.tween_property(dom, "position", target_pos, 0.25).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+			await tween.finished
+
+			hand_nodes[player].add_domino_to_hand(dom)
+			if player == "me":
+				dom.update_domino_display()
+			else:
+				dom.update_domino_display_non_player()
+
+	# After dealing, update hand layouts
+	for player in hand_nodes.keys():
+		hand_nodes[player].update_hand_position()
+
+
 func generate_all_dominos():
 	var all_dominos = []
 	for i in range(7):
@@ -433,33 +545,40 @@ func pick_ai_trump(hand_node):
 func _on_blank_button_pressed() -> void:
 	trump = 0
 	$"../trumpSelector".visible = false
+	$"../trumpLabel".text = "Trump: " + str(trump)
 
 
 func _on_one_button_pressed() -> void:
 	trump = 1
 	$"../trumpSelector".visible = false
+	$"../trumpLabel".text = "Trump: " + str(trump)
 
 
 func _on_two_button_pressed() -> void:
 	trump = 2
 	$"../trumpSelector".visible = false
+	$"../trumpLabel".text = "Trump: " + str(trump)
 
 
 func _on_threebutton_pressed() -> void:
 	trump = 3
 	$"../trumpSelector".visible = false
+	$"../trumpLabel".text = "Trump: " + str(trump)
 
 
 func _on_four_button_pressed() -> void:
 	trump = 4
 	$"../trumpSelector".visible = false
+	$"../trumpLabel".text = "Trump: " + str(trump)
 
 
 func _on_five_button_pressed() -> void:
 	trump = 5
 	$"../trumpSelector".visible = false
+	$"../trumpLabel".text = "Trump: " + str(trump)
 
 
 func _on_six_button_pressed() -> void:
 	trump = 6
 	$"../trumpSelector".visible = false
+	$"../trumpLabel".text = "Trump: " + str(trump)

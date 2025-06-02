@@ -17,6 +17,9 @@ func receive_domino_values(domino_values: Array):
 		var new_domino = domino_scene.instantiate()
 		new_domino.left_value = pair[0]
 		new_domino.right_value = pair[1]
+		
+		new_domino.z_index = 999
+		new_domino.z_as_relative = false
 
 		get_node("../dominoManager").add_child(new_domino)
 		add_domino_to_hand(new_domino)
