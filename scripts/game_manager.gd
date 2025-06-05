@@ -17,6 +17,9 @@ var domsThatTurn = {}
 var winning_player = "tm8"
 var trump = -1
 var base = ["me","op1","tm8","op2"]
+var myOvrScore = 0
+var opOvrScore = 0
+var highest_bid = 0
 
 # Called when the node is added to the scene
 func _ready():
@@ -26,17 +29,33 @@ func run_game():
 	$"../startGame".visible = false
 	#inital dom flop to decide dealer
 	await select_dealer()
-	#dealer shakes then hands dominos out
+	for i in range(100):
+		$"../myOvr".text = str(myOvrScore)
+		$"../opOvr".text = str(opOvrScore)
+		if (myOvrScore < 3) && (opOvrScore < 3):
+			await play_hand()
+			if myScore > opponentScore:
+				myOvrScore += 1
+				myScore = 0
+				opponentScore = 0
+			else:
+				opOvrScore += 1
+				myScore = 0
+				opponentScore = 0
+			update_score()
+		else:
+			break
+	present_final_score()
+
+func play_hand():
 	await animate_deal_dominos(winning_player)
 	#left of dealer starts bid phase
 	await bidding()
 	#bid winner starts
 	await play_round()
-	$"../trumpLabel".text = "Trump: "
-	present_final_score()
 
 func bidding():
-	var highest_bid = 30
+	highest_bid = 29
 	var highest_bidder = ""
 	var passes = 0
 	var bid_order = []
@@ -53,7 +72,7 @@ func bidding():
 	for player in bid_order:
 		if player == "me":
 			# Show bidding UI for player
-			var bid_screen = get_node("../biddingScreen")
+			var bid_screen = get_node("../bidding/biddingScreen")
 			bid_screen.visible = true
 			bid_screen.curBid = highest_bid + 1
 			bid_screen.bidNum = bid_screen.curBid
@@ -129,6 +148,8 @@ func play_round():
 				var played_dom = domsThatTurn[player][0]
 				leadingSuit = max(played_dom[0], played_dom[1])
 		domino_accountant()
+		if opponentScore > highest_bid || myScore > highest_bid:
+			break
 		$"../Timer".start()
 		await $"../Timer".timeout
 	#clear doms

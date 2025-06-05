@@ -23,9 +23,10 @@ color = Color(0, 0, 0, 0.780392)
 
 [node name="Label" type="Label" parent="ColorRect"]
 layout_mode = 0
-offset_top = 138.0
-offset_right = 1279.0
-offset_bottom = 292.0
+offset_left = -16.8704
+offset_top = 145.349
+offset_right = 1262.13
+offset_bottom = 299.349
 theme_override_fonts/font = ExtResource("2_wvs4e")
 theme_override_font_sizes/font_size = 75
 text = "Whats your bid?"
@@ -33,30 +34,30 @@ horizontal_alignment = 1
 
 [node name="right" type="Button" parent="ColorRect"]
 layout_mode = 0
-offset_left = 709.492
-offset_top = 297.391
-offset_right = 771.492
-offset_bottom = 350.391
+offset_left = 692.622
+offset_top = 237.803
+offset_right = 754.622
+offset_bottom = 290.803
 theme_override_fonts/font = ExtResource("2_wvs4e")
 theme_override_font_sizes/font_size = 60
 text = ">"
 
 [node name="left" type="Button" parent="ColorRect"]
 layout_mode = 0
-offset_left = 501.425
-offset_top = 296.435
-offset_right = 563.425
-offset_bottom = 349.435
+offset_left = 484.555
+offset_top = 236.847
+offset_right = 546.555
+offset_bottom = 289.847
 theme_override_fonts/font = ExtResource("2_wvs4e")
 theme_override_font_sizes/font_size = 60
 text = "<"
 
 [node name="bidNum" type="Label" parent="ColorRect"]
 layout_mode = 0
-offset_left = 602.647
-offset_top = 283.048
-offset_right = 672.647
-offset_bottom = 366.048
+offset_left = 585.777
+offset_top = 223.46
+offset_right = 655.777
+offset_bottom = 306.46
 theme_override_fonts/font = ExtResource("2_wvs4e")
 theme_override_font_sizes/font_size = 75
 text = "30"
@@ -65,20 +66,20 @@ vertical_alignment = 1
 
 [node name="subBid" type="Button" parent="ColorRect"]
 layout_mode = 0
-offset_left = 537.04
-offset_top = 393.972
-offset_right = 747.04
-offset_bottom = 476.972
+offset_left = 520.17
+offset_top = 334.384
+offset_right = 730.17
+offset_bottom = 417.384
 theme_override_fonts/font = ExtResource("2_wvs4e")
 theme_override_font_sizes/font_size = 40
 text = "Submit bid"
 
 [node name="pass" type="Button" parent="ColorRect"]
 layout_mode = 0
-offset_left = 563.283
-offset_top = 501.071
-offset_right = 720.283
-offset_bottom = 564.071
+offset_left = 546.413
+offset_top = 441.483
+offset_right = 703.413
+offset_bottom = 504.483
 theme_override_fonts/font = ExtResource("2_wvs4e")
 theme_override_font_sizes/font_size = 40
 text = "Pass"

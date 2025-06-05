@@ -7,6 +7,7 @@ signal bid_made(result)
 func _ready() -> void:
 	curBid = 30
 	bidNum = curBid
+	z_index = 10000
 func wait_for_bid():
 	var result = await self.bid_made
 	return result
