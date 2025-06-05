@@ -144,6 +144,41 @@ position = Vector2(48.2499, 119.5)
 scale = Vector2(2.29688, 5.3125)
 texture = ExtResource("1_vvjxa")
 
+[node name="bidMe" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(348.25, 119.5)
+scale = Vector2(2.29688, 5.3125)
+texture = ExtResource("1_vvjxa")
+
+[node name="bidOp" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(920.265, 119.5)
+scale = Vector2(2.29688, 5.3125)
+texture = ExtResource("1_vvjxa")
+
+[node name="bidMeL" type="Label" parent="."]
+visible = false
+offset_left = 326.0
+offset_top = 106.0
+offset_right = 650.0
+offset_bottom = 189.0
+theme_override_fonts/font = ExtResource("9_gaopx")
+theme_override_font_sizes/font_size = 47
+text = "30
+"
+
+[node name="bidOpL" type="Label" parent="."]
+visible = false
+offset_left = 899.0
+offset_top = 105.0
+offset_right = 1223.0
+offset_bottom = 188.0
+theme_override_fonts/font = ExtResource("9_gaopx")
+theme_override_font_sizes/font_size = 47
+text = "30
+
+"
+
 [node name="Pixil-frame-0(9)4" type="Sprite2D" parent="."]
 position = Vector2(1230, 119.5)
 scale = Vector2(2.29688, 5.3125)

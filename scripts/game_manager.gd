@@ -20,6 +20,7 @@ var base = ["me","op1","tm8","op2"]
 var myOvrScore = 0
 var opOvrScore = 0
 var highest_bid = 0
+var team_in_lead = ""
 
 # Called when the node is added to the scene
 func _ready():
@@ -34,20 +35,26 @@ func run_game():
 		$"../opOvr".text = str(opOvrScore)
 		if (myOvrScore < 3) && (opOvrScore < 3):
 			await play_hand()
-			if myScore > opponentScore:
+			if team_in_lead == "us":
 				myOvrScore += 1
 				myScore = 0
 				opponentScore = 0
+				team_in_lead == ""
 			else:
 				opOvrScore += 1
 				myScore = 0
 				opponentScore = 0
+				team_in_lead == ""
 			update_score()
 		else:
 			break
 	present_final_score()
 
 func play_hand():
+	$"../bidMe".visible = false
+	$"../bidOp".visible = false
+	$"../bidMeL".visible = false
+	$"../bidOpL".visible = false
 	await animate_deal_dominos(winning_player)
 	#left of dealer starts bid phase
 	await bidding()
@@ -97,6 +104,16 @@ func bidding():
 		highest_bid = 30
 	winning_player = highest_bidder
 	print("Bid winner:", winning_player, "with", highest_bid)
+	if (winning_player == "me" || winning_player == "tm8"):
+		$"../bidMe".visible = true
+		$"../bidMeL".visible = true
+		$"../bidMeL".text = str(highest_bid)
+		team_in_lead = "us"
+	if (winning_player == "op1" || winning_player == "op2"):
+		$"../bidOp".visible = true
+		$"../bidOpL".visible = true
+		$"../bidOpL".text = str(highest_bid)
+		team_in_lead = "them"
 
 func ai_make_bid(player, current_highest_bid):
 	# Simple AI: random pass or +1 bid
@@ -148,13 +165,38 @@ func play_round():
 				var played_dom = domsThatTurn[player][0]
 				leadingSuit = max(played_dom[0], played_dom[1])
 		domino_accountant()
-		if opponentScore > highest_bid || myScore > highest_bid:
-			break
 		$"../Timer".start()
 		await $"../Timer".timeout
 	#clear doms
 		await animate_dominos_to_winner()
 		print(winning_player)
+		if check_for_round_winner():
+			return
+
+func check_for_round_winner():
+	if (team_in_lead == "them" && opponentScore >= highest_bid):
+		for dom in dominosInMiddle:
+			dom.queue_free()
+		dominosInMiddle.clear()
+		team_in_lead = "them"
+		return true
+	if (team_in_lead == "us" && myScore >= highest_bid):
+		for dom in dominosInMiddle:
+			dom.queue_free()
+		dominosInMiddle.clear()
+		team_in_lead = "us"
+		return true
+	if (team_in_lead == "them" && myScore < highest_bid - 42):
+		for dom in dominosInMiddle:
+			dom.queue_free()
+		dominosInMiddle.clear()
+		return true
+	if (team_in_lead == "us" && opponentScore < highest_bid - 42):
+		for dom in dominosInMiddle:
+			dom.queue_free()
+		dominosInMiddle.clear()
+		team_in_lead = "them"
+		return true
 
 func select_trump():
 	if winning_player == "me":
