@@ -519,7 +519,7 @@ func get_player_with_biggest_domino() -> String:
 	return best_player
 
 func present_final_score():
-	if myScore > opponentScore:
+	if myOvrScore > opOvrScore:
 		print("I win")
 	else:
 		print("you lost")
