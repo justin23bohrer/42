@@ -163,7 +163,10 @@ func play_round():
 				await self.domino_submitted
 			if y == 0 and domsThatTurn[player].size() > 0:
 				var played_dom = domsThatTurn[player][0]
-				leadingSuit = max(played_dom[0], played_dom[1])
+				if played_dom[0] == trump or played_dom[1] == trump:
+					leadingSuit = trump
+				else:
+					leadingSuit = max(played_dom[0], played_dom[1])
 		domino_accountant()
 		$"../Timer".start()
 		await $"../Timer".timeout
@@ -398,6 +401,25 @@ func generate_all_dominos():
 			all_dominos.append([i, j])
 	return all_dominos
 
+func is_valid_domino_submission(domino, player_hand) -> bool:
+	# If this is the first domino of the trick, any domino is valid
+	if leadingSuit == -1:
+		return true
+
+	# Check if player has any domino that matches the leading suit
+	var has_leading = false
+	for d in player_hand:
+		if d.left_value == leadingSuit or d.right_value == leadingSuit:
+			has_leading = true
+			break
+
+	# If player has a domino of the leading suit, they must play it
+	if has_leading:
+		return domino.left_value == leadingSuit or domino.right_value == leadingSuit
+
+	# Otherwise, any domino is valid
+	return true
+
 # Called when the submit button is pressed
 func _on_sub_dom_pressed() -> void:
 	var slot = get_node("../dominoSlot")
@@ -406,11 +428,30 @@ func _on_sub_dom_pressed() -> void:
 	if not slot.domino_in_slot or not slot.domino:
 		return
 
+	var domino = slot.domino
+	var player_hand = get_node("../playerHand").player_hand
+
+	# Check if the domino is valid
+	if not is_valid_domino_submission(domino, player_hand):
+		# Invalid move: return domino to hand and show a message
+		player_hand.append(domino)
+		get_node("../playerHand").update_hand_position()
+		slot.domino_in_slot = false
+		slot.domino = null
+		domino.rotation = 0
+		slot.get_node("Area2D/CollisionShape2D").disabled = false
+		$"../subDom".visible = false
+		$"../dominoSlot".visible = true
+		$"../invalidMoveLabel".visible = true  # Optional: show a label for feedback
+		await get_tree().create_timer(1.5).timeout
+		$"../subDom".visible = true
+		$"../invalidMoveLabel".visible = false
+		return
+		
 	$"../subDom".visible = false
 	$"../dominoSlot".visible = false
 
 	#submitting dom in slot
-	var domino = slot.domino
 	domsThatTurn["me"].append([domino.left_value, domino.right_value])
 	emit_signal("domino_submitted")
 	dominosInMiddle.append(domino)
