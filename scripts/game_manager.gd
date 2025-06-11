@@ -28,6 +28,9 @@ func _ready():
 
 func run_game():
 	$"../startGame".visible = false
+	$"../CanvasLayer/Label".visible = false
+	$"../CanvasLayer/AnimatedSprite2D2".visible = false
+	$"../CanvasLayer/AnimatedSprite2D4".visible = false
 	#inital dom flop to decide dealer
 	await select_dealer()
 	for i in range(100):
@@ -626,9 +629,17 @@ func get_player_with_biggest_domino() -> String:
 func present_final_score():
 	if myOvrScore > opOvrScore:
 		print("I win")
+		$"../CanvasLayer/Label".visible = true
+		$"../CanvasLayer/Label".text = "You Win!!!!"
+		$"../CanvasLayer/AnimatedSprite2D2".visible = true
+		$"../CanvasLayer/AnimatedSprite2D2".play()
+		$"../CanvasLayer/AnimatedSprite2D4".visible = true
+		$"../CanvasLayer/AnimatedSprite2D4".play()
 	else:
-		print("you lost")
+		$"../CanvasLayer/Label".visible = true
+		$"../CanvasLayer/Label".text = "You lost"
 	$"../startGame".visible = true
+
 func update_score():
 	$"../myScore".text = "Our Score: " + str(myScore)
 	$"../opponentScore".text = "Opponent Score: " + str(opponentScore)
