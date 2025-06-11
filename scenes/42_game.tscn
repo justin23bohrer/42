@@ -317,9 +317,9 @@ text = "+1"
 
 [node name="myTeamPoints" type="Label" parent="."]
 visible = false
-offset_left = 253.0
+offset_left = 158.0
 offset_top = 82.0
-offset_right = 293.0
+offset_right = 198.0
 offset_bottom = 105.0
 scale = Vector2(2, 2)
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -329,9 +329,9 @@ text = "+1"
 
 [node name="opTeamPoints" type="Label" parent="."]
 visible = false
-offset_left = 1159.0
+offset_left = 1054.0
 offset_top = 80.0
-offset_right = 1199.0
+offset_right = 1094.0
 offset_bottom = 103.0
 scale = Vector2(2, 2)
 theme_override_colors/font_color = Color(1, 1, 1, 1)
@@ -565,6 +565,57 @@ offset_left = -30.0
 offset_top = -43.0
 offset_right = -30.0
 offset_bottom = -43.0
+
+[node name="bidLogo" type="Sprite2D" parent="bidding"]
+visible = false
+position = Vector2(929, 342)
+scale = Vector2(7.34375, 5.3125)
+texture = ExtResource("1_vvjxa")
+
+[node name="bidLogo2" type="Label" parent="bidding"]
+visible = false
+offset_left = 853.0
+offset_top = 329.0
+offset_right = 1177.0
+offset_bottom = 412.0
+theme_override_fonts/font = ExtResource("9_gaopx")
+theme_override_font_sizes/font_size = 47
+text = "Bidding
+"
+
+[node name="bidOp3" type="Sprite2D" parent="bidding"]
+visible = false
+position = Vector2(657.5, 49)
+scale = Vector2(41.5937, 7.75)
+texture = ExtResource("1_vvjxa")
+
+[node name="bidMeL3" type="Label" parent="bidding"]
+visible = false
+offset_left = 163.0
+offset_top = 34.0
+offset_right = 1146.0
+offset_bottom = 117.0
+theme_override_fonts/font = ExtResource("9_gaopx")
+theme_override_font_sizes/font_size = 47
+text = "\"Bid winner: \", highest_bidder, \" with \", highest_bid"
+horizontal_alignment = 1
+
+[node name="trumpLogo" type="Sprite2D" parent="bidding"]
+visible = false
+position = Vector2(671, 332)
+scale = Vector2(13.3125, 7.75)
+texture = ExtResource("1_vvjxa")
+
+[node name="trumpLogo2" type="Label" parent="bidding"]
+visible = false
+offset_left = 175.0
+offset_top = 318.0
+offset_right = 1158.0
+offset_bottom = 402.0
+theme_override_fonts/font = ExtResource("9_gaopx")
+theme_override_font_sizes/font_size = 47
+text = "The trump is 5"
+horizontal_alignment = 1
 
 [node name="invalidMoveLabel" type="Label" parent="."]
 visible = false

@@ -23,10 +23,10 @@ color = Color(0, 0, 0, 0.780392)
 
 [node name="Label" type="Label" parent="ColorRect"]
 layout_mode = 0
-offset_left = -16.8704
-offset_top = 145.349
-offset_right = 1262.13
-offset_bottom = 299.349
+offset_left = -9.37242
+offset_top = 164.474
+offset_right = 1269.63
+offset_bottom = 318.474
 theme_override_fonts/font = ExtResource("2_wvs4e")
 theme_override_font_sizes/font_size = 75
 text = "Whats your bid?"
@@ -66,20 +66,20 @@ vertical_alignment = 1
 
 [node name="subBid" type="Button" parent="ColorRect"]
 layout_mode = 0
-offset_left = 520.17
-offset_top = 334.384
-offset_right = 730.17
-offset_bottom = 417.384
+offset_left = 521.107
+offset_top = 303.129
+offset_right = 731.107
+offset_bottom = 386.129
 theme_override_fonts/font = ExtResource("2_wvs4e")
 theme_override_font_sizes/font_size = 40
 text = "Submit bid"
 
 [node name="pass" type="Button" parent="ColorRect"]
 layout_mode = 0
-offset_left = 546.413
-offset_top = 441.483
-offset_right = 703.413
-offset_bottom = 504.483
+offset_left = 548.287
+offset_top = 409.272
+offset_right = 705.287
+offset_bottom = 472.272
 theme_override_fonts/font = ExtResource("2_wvs4e")
 theme_override_font_sizes/font_size = 40
 text = "Pass"

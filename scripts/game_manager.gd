@@ -49,6 +49,12 @@ func run_game():
 		else:
 			break
 	present_final_score()
+	myOvrScore = 0
+	opOvrScore = 0
+	$"../bidOp".visible = false
+	$"../bidMeL".visible = false
+	$"../bidMe".visible = false
+	$"../bidOpL".visible = false
 
 func play_hand():
 	$"../bidMe".visible = false
@@ -62,6 +68,7 @@ func play_hand():
 	await play_round()
 
 func bidding():
+	$"../bidding/bidMeL3".text = "Table is open"
 	highest_bid = 29
 	var highest_bidder = ""
 	var passes = 0
@@ -75,7 +82,8 @@ func bidding():
 	print(winning_player)
 
 	var bids = {}
-
+	$"../bidding/bidMeL3".visible = true
+	$"../bidding/bidOp3".visible = true
 	for player in bid_order:
 		if player == "me":
 			# Show bidding UI for player
@@ -91,18 +99,38 @@ func bidding():
 					highest_bid = bid
 					highest_bidder = player
 		else:
-			var ai_bid = ai_make_bid(player, highest_bid)
+			var ai_bid = await ai_make_bid(player, highest_bid)
 			if ai_bid != "pass":
 				var bid = int(ai_bid)
 				if bid > highest_bid:
 					highest_bid = bid
 					highest_bidder = player
-		print("Bid winner:", highest_bidder, "with", highest_bid)
+		if highest_bidder == "op1":
+			$"../bidding/bidMeL3".text = "Opponent 1 is winning with " + str(highest_bid)
+		elif highest_bidder == "op2":
+			$"../bidding/bidMeL3".text = "Opponent 2 is winning with " + str(highest_bid)
+		elif highest_bidder == "tm8":
+			$"../bidding/bidMeL3".text = "Teammate is winning with " + str(highest_bid)
+		elif highest_bidder == "me":
+			$"../bidding/bidMeL3".text = "You are winning with " + str(highest_bid)
+		else:
+			$"../bidding/bidMeL3".text = "Table is open"
 	# If only one left, break
 	if highest_bidder == "":
 		highest_bidder = bid_order[-1]
 		highest_bid = 30
 	winning_player = highest_bidder
+	if highest_bidder == "op1":
+		$"../bidding/bidMeL3".text = "Opponent 1 won it with " + str(highest_bid)
+	elif highest_bidder == "op2":
+		$"../bidding/bidMeL3".text = "Opponent 2 won it with " + str(highest_bid)
+	elif highest_bidder == "tm8":
+		$"../bidding/bidMeL3".text = "Teammate won it with " + str(highest_bid)
+	elif highest_bidder == "me":
+		$"../bidding/bidMeL3".text = "You won it with " + str(highest_bid)
+	await get_tree().create_timer(2.0).timeout
+	$"../bidding/bidMeL3".visible = false
+	$"../bidding/bidOp3".visible = false
 	print("Bid winner:", winning_player, "with", highest_bid)
 	if (winning_player == "me" || winning_player == "tm8"):
 		$"../bidMe".visible = true
@@ -117,6 +145,21 @@ func bidding():
 
 func ai_make_bid(player, current_highest_bid):
 	# Simple AI: random pass or +1 bid
+	$"../bidding/bidLogo".visible = true
+	$"../bidding/bidLogo2".visible = true
+	if player == "op1":
+		$"../bidding/bidLogo".position = Vector2(362,338)
+		$"../bidding/bidLogo2".position = Vector2(282,324)
+	if player == "tm8":
+		$"../bidding/bidLogo".position = Vector2(608,210)
+		$"../bidding/bidLogo2".position = Vector2(532,195)
+	if player == "op2":
+		$"../bidding/bidLogo".position = Vector2(929,338)
+		$"../bidding/bidLogo2".position = Vector2(853,324)
+		
+	await get_tree().create_timer(2.0).timeout
+	$"../bidding/bidLogo".visible = false
+	$"../bidding/bidLogo2".visible = false
 	if randi() % 2 == 0 or current_highest_bid >= 42:
 		return "pass"
 	print("passing")
@@ -146,7 +189,7 @@ func turn(turn, player):
 		$"../subDom".visible = true
 
 func play_round():
-	select_trump()
+	await select_trump()
 	for i in range(7):
 		domsThatTurn = {
 			"op1": [],
@@ -176,30 +219,45 @@ func play_round():
 		if check_for_round_winner():
 			return
 
-func check_for_round_winner():
-	if (team_in_lead == "them" && opponentScore >= highest_bid):
-		for dom in dominosInMiddle:
+func clear_all_hands():
+	var hand_nodes = [
+		get_node("../playerHand"),
+		get_node("../teammateHand"),
+		get_node("../opponentHand1"),
+		get_node("../opponentHand2")
+	]
+	for hand in hand_nodes:
+		for dom in hand.player_hand:
 			dom.queue_free()
-		dominosInMiddle.clear()
+		hand.player_hand.clear()
+		hand.update_hand_position()
+	for dom in dominosInMiddle:
+		dom.queue_free()
+	dominosInMiddle.clear()
+
+func check_for_round_winner():
+	print("Checking round winner:")
+	print("team_in_lead:", team_in_lead)
+	print("myScore:", myScore)
+	print("opponentScore:", opponentScore)
+	print("highest_bid:", highest_bid)
+
+	if (team_in_lead == "them" && opponentScore >= highest_bid):
+		clear_all_hands()
 		team_in_lead = "them"
 		return true
 	if (team_in_lead == "us" && myScore >= highest_bid):
-		for dom in dominosInMiddle:
-			dom.queue_free()
-		dominosInMiddle.clear()
+		clear_all_hands()
 		team_in_lead = "us"
 		return true
-	if (team_in_lead == "them" && myScore < highest_bid - 42):
-		for dom in dominosInMiddle:
-			dom.queue_free()
-		dominosInMiddle.clear()
+	if (team_in_lead == "them" && myScore > 42 - highest_bid):
+		clear_all_hands()
 		return true
-	if (team_in_lead == "us" && opponentScore < highest_bid - 42):
-		for dom in dominosInMiddle:
-			dom.queue_free()
-		dominosInMiddle.clear()
+	if (team_in_lead == "us" && opponentScore > 42 - highest_bid):
+		clear_all_hands()
 		team_in_lead = "them"
 		return true
+	return false
 
 func select_trump():
 	if winning_player == "me":
@@ -211,7 +269,13 @@ func select_trump():
 		# Let AI pick highest count or highest double
 		trump = pick_ai_trump(get_node("../teammateHand" if winning_player == "tm8" else "../opponentHand1" if winning_player == "op1" else "../opponentHand2"))
 		print("AI picked trump:", trump)
-	$"../trumpLabel".text = "Trump: " + str(trump)
+		$"../bidding/trumpLogo2".visible = true
+		$"../bidding/trumpLogo2".text = "The Trump is "+ str(trump)
+		$"../bidding/trumpLogo".visible = true
+		await get_tree().create_timer(2.5).timeout
+		$"../trumpLabel".text = "Trump: " + str(trump)
+		$"../bidding/trumpLogo2".visible = false
+		$"../bidding/trumpLogo".visible = false
 	
 func rotate_players():
 	var index = player_rotation.find(winning_player)
@@ -644,45 +708,48 @@ func pick_ai_trump(hand_node):
 		count[dom.left_value] += 1
 		count[dom.right_value] += 1
 	return count.find(count.max())
+	
+func i_bid():
+	$"../trumpSelector".visible = false
+	$"../bidding/trumpLogo2".visible = true
+	$"../bidding/trumpLogo2".text = "The Trump is "+ str(trump)
+	$"../bidding/trumpLogo".visible = true
+	await get_tree().create_timer(2.5).timeout
+	$"../trumpLabel".text = "Trump: " + str(trump)
+	$"../bidding/trumpLogo2".visible = false
+	$"../bidding/trumpLogo".visible = false
 
 
 func _on_blank_button_pressed() -> void:
 	trump = 0
-	$"../trumpSelector".visible = false
-	$"../trumpLabel".text = "Trump: " + str(trump)
+	i_bid()
 
 
 func _on_one_button_pressed() -> void:
 	trump = 1
-	$"../trumpSelector".visible = false
-	$"../trumpLabel".text = "Trump: " + str(trump)
+	i_bid()
 
 
 func _on_two_button_pressed() -> void:
 	trump = 2
-	$"../trumpSelector".visible = false
-	$"../trumpLabel".text = "Trump: " + str(trump)
+	i_bid()
 
 
 func _on_threebutton_pressed() -> void:
 	trump = 3
-	$"../trumpSelector".visible = false
-	$"../trumpLabel".text = "Trump: " + str(trump)
+	i_bid()
 
 
 func _on_four_button_pressed() -> void:
 	trump = 4
-	$"../trumpSelector".visible = false
-	$"../trumpLabel".text = "Trump: " + str(trump)
+	i_bid()
 
 
 func _on_five_button_pressed() -> void:
 	trump = 5
-	$"../trumpSelector".visible = false
-	$"../trumpLabel".text = "Trump: " + str(trump)
+	i_bid()
 
 
 func _on_six_button_pressed() -> void:
 	trump = 6
-	$"../trumpSelector".visible = false
-	$"../trumpLabel".text = "Trump: " + str(trump)
+	i_bid()
